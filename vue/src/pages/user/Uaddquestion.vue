@@ -42,7 +42,7 @@
 
 <script>
     export default {
-        name: "Addquestion",
+        name: "uAddquestion",
       data(){
           return{
             addList:{
@@ -85,7 +85,7 @@
             this.addList.uid=''
             this.addList.type=''
           this.$router.push({
-            path:'/question',
+            path:'/u/question',
           })
         },
         submit:function () {
@@ -112,7 +112,7 @@
                 type:"warning"
               }).then(()=>{
                 that.addList.type="未知"
-                that.$http.post('/yii/question/index/addquestion',{
+                that.$http.post('/yii/question/index/uaddquestion',{
                   title:that.addList.title,
                   content:that.addList.content,
                   type:that.addList.type,
@@ -120,7 +120,7 @@
                 }).then(function (res) {
                   alert(res.data.message)
                   that.$router.push({
-                    path:'/question'
+                    path:'/u/question'
                   })
                   this.addList.title=''
                   this.addList.content=''
@@ -128,14 +128,13 @@
                   this.addList.type=''
                 }).catch(function (err) {
                   console.log(err)
-              })
+                })
               }).catch(function (err) {
                 console.log(err)
               })
             }
-            else
-            {
-              that.$http.post('/yii/question/index/addquestion',{
+            else {
+              that.$http.post('/yii/question/index/uaddquestion',{
                 title:that.addList.title,
                 content:that.addList.content,
                 type:that.addList.type,
@@ -143,7 +142,7 @@
               }).then(function (res) {
                 alert(res.data.message)
                 that.$router.push({
-                  path:'/question'
+                  path:'/u/question'
                 })
                 this.addList.title=''
                 this.addList.content=''
@@ -157,8 +156,9 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
-            flag:2
+          this.$http.post('/yii/question/index/uquery',{
+            flag:2,
+            uid:that.$store.getters.getsId
           }).then(function (res) {
             console.log(res.data)
             that.typeList = res.data.data
@@ -170,7 +170,6 @@
       },
       created() {
           this.getType()
-        this.addList.uid = this.$store.getters.getsId
       }
     }
 </script>

@@ -17,6 +17,7 @@
     "font-awesome": "^4.7.0",
     "lrz": "^4.9.41",
     "vue": "^2.5.2",
+    "vue-html5-editor": "^1.1.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.5.1"
   },

@@ -46,12 +46,12 @@
         back:function()
         {
           this.$router.push({
-            path:'/question',
+            path:'/u/question',
           })
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/yii/question/index/uquery',{
             flag:5,
             qid:that.qid,
             uid:that.uid
@@ -63,7 +63,7 @@
             that.qList.content=List.content
             that.qList.ctime=List.ctime
             that.qList.uid=that.getUserName(List.uid)
-            that.qList.typename= that.getTypeName(List.id)
+            that.qList.typename= that.getTypeName(List.type)
             console.log(that.qList)
           }).catch(function (error) {
             console.log(error)

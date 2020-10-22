@@ -59,16 +59,16 @@
             if(role==1)
             {
               //管理员
-              this.$router.push({path:'/admin/index'})
+              this.$router.push({path:'/question'})
             }
             else if(role ==2)
             {
               //二级管理员
-              this.$router.push({path:'/teacher/index'})
+              this.$router.push({path:'/t/question'})
             }
             else
             {
-              this.$router.push({path:'/question'})
+              this.$router.push({path:'/u/question'})
             }
           }
           else if(message=="该用户不存在")

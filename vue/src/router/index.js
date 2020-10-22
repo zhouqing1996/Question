@@ -13,6 +13,11 @@ import Login from '../pages/login'
 //404错误
 import NotFound from '../pages/404'
 Vue.use(Router)
+import UHome from '../pages/user/Uhome'
+import UQuestion from '../pages/user/Uquestion'
+import UviewQuestion from '../pages/user/Uviewquestion'
+import USearchQuestion from '../pages/user/Usearch'
+import UaddQuestion from '../pages/user/Uaddquestion'
 
 export default new Router({
   mode:'history',
@@ -91,6 +96,45 @@ export default new Router({
             isLogin:true,
           },
           component:Viewquestion
+        }
+      ]
+    },
+    {
+      path:'/u',
+      name:'U',
+      component:UHome,
+      children: [
+        {
+          path:'/u/question',
+          name:'Uquestion',
+          meta:{
+            isLogin:true
+          },
+          component:UQuestion
+        },
+        {
+          path:'/u/search',
+          name:'USearch',
+          meta:{
+            isLogin:true
+          },
+          component:USearchQuestion
+        },
+        {
+          path:'/u/addquestion',
+          name:"Uadd",
+          meta:{
+            isLogin:true
+          },
+          component:UaddQuestion
+        },
+        {
+          path:'/u/viewquestion',
+          name:'UViewQuestion',
+          meta:{
+            isLogin:true
+          },
+          component:UviewQuestion
         }
       ]
     }

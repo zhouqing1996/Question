@@ -37,6 +37,7 @@
             name:'',
             //查询的问题
             qList:[],
+            uid:'',
             // 翻页相关
             currentPage: 1,
             totalPage: 1,
@@ -48,7 +49,7 @@
         back:function()
         {
           this.$router.push({
-            path:'/question',
+            path:'/u/question',
           })
         },
         //分页
@@ -71,9 +72,10 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/yii/question/index/uquery',{
             flag:3,
-            name:that.name
+            name:that.name,
+            uid:that.uid
           }).then(function (res) {
             console.log(res.data)
             that.qList = res.data.data
@@ -86,6 +88,7 @@
         },
       },
       created(){
+        this.uid = this.$store.getters.getsId
           this.name = this.$route.query.search
         this.getList()
       }
