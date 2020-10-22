@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div style="text-align: left;padding: 20px;margin-left: 20px;margin-top: 20px">
+    <div>
+      <button class="btn2 el-icon-search" v-on:click="back">返回</button>
+      <span style="text-align: left">共{{qList.length}}个相关问题</span>
+    </div>
     <div v-for="(x,i) in currentPageData">
       <h3>{{x.title}}</h3>
       <span>问题创建人：{{x.uid}}|创建时间：{{x.ctime}}</span>
@@ -38,6 +42,12 @@
           }
       },
       methods:{
+        back:function()
+        {
+          this.$router.push({
+            path:'/question',
+          })
+        },
         //分页
         setCurrentPageDate: function () {
           let begin = (this.currentPage - 1) * this.pageSize;
@@ -98,5 +108,22 @@
     height: 30px;
     width: 100px;
     margin: 0 10px;
+  }
+  .btn2 {
+    width: 100px;/*px*/
+    padding: 7px;
+    font-size: 14px;
+    border-radius: 3px;
+    border: none;
+    color: white;
+    background-color: #7F96FE;
+    float: left;
+    margin-left: 5px;
+    margin-top: 17px;
+    margin-bottom: 5px;
+  }
+
+  .btn2:hover {
+    background-color: #5FA7FE;
   }
 </style>

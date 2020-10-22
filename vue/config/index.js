@@ -18,6 +18,13 @@ module.exports = {
           '^/yii': ''//后面可以使重写的新路径，一般不做更改
         }
       },
+      '/upload':{
+        changeOrigin: true,
+        target: 'http://127.0.0.1/Question/Yii/backend/upload',
+        pathRewrite: {
+          '^/upload':''
+        }
+      }
     },
 
     // Various Dev Server settings

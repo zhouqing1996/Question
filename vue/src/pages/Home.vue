@@ -18,13 +18,15 @@
                 <el-menu-item index="2-4-3">选项3</el-menu-item>
               </el-submenu>
             </el-submenu>
-            <el-menu-item index="3" >消息中心</el-menu-item>
+            <el-menu-item index="3" v-on:click="logout" >注销</el-menu-item>
           </el-menu>
         </el-header>
-        <el-main>
+        <el-main style="height: 520px;width: 100%">
           <router-view/>
         </el-main>
-        <el-footer>Footer</el-footer>
+        <el-footer>
+          <p>Copyrights©{{CurrentYear}} by zhouqing.</p>
+        </el-footer>
       </el-container>
     </div>
 </template>
@@ -33,39 +35,40 @@
     export default {
         name: "Home",
       data(){
-          return{
-            isCollapse: true,
-            typeList:[],
+        var copyright=new Date();
+        var update=copyright.getFullYear()
+          return {
+            CurrentYear:update
           }
       },
       methods: {
-        handleOpen(key, keyPath) {
-          console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-          console.log(key, keyPath);
-        },
-        getType:function () {
-          let that =this
-          this.$http.post('/yiiquestion/index/query',{
-            flag:2
+        logout:function () {
+          let suserid = this.$store.getters.getsId
+          console.log(suserid)
+          let that = this
+          this.$confirm("是否退出？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
           }).then(function (res) {
-            console.log(res.data)
-            that.typeList = res.data.data
-          }).catch(function (error) {
-            console.log(error)
+            that.$store.dispatch('slogout')
+            alert("退出成功！")
+            that.$router.push({path: '/login'})
+          }).catch(function (err) {
+            console.log(err)
           })
         }
       },
       created(){
-          this.getType()
+
       }
     }
 </script>
 
 <style scoped>
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
+  p {
+    font-size: 1.4rem;
+    margin: auto;
+    color: #3d3d3d;
   }
 </style>

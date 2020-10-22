@@ -1,17 +1,37 @@
 <template>
   <div >
     <el-container>
-      <el-aside width="200px">
-        <el-menu
-          class="el-menu-vertical-demo"
-          style="width: 150px" v-for="(x,i) in typeList">
-          <el-menu-item index="i+1">
-            <i class="el-icon-menu"></i>
-            <span slot="title" @click="Click(x.id)">{{x.typename}}</span>
-          </el-menu-item>
-        </el-menu>
+      <el-aside>
+          <el-menu
+            class="el-menu-vertical-demo"
+            style="width: 150px">
+            <el-menu-item index="1">
+              <i class="el-icon-menu"></i>
+              <span slot="title" @click="Clickall">全部类型问题</span>
+            </el-menu-item>
+            <div v-for="(x,i) in typeList">
+              <el-menu-item :index="(i+2).toString()">
+                <i class="el-icon-menu"></i>
+                <span slot="title" @click="Click(x.id)">{{x.typename}}</span>
+              </el-menu-item>
+            </div>
+          </el-menu>
+<!--        <el-menu-->
+<!--          class="el-menu-vertical-demo"-->
+<!--          style="width: 150px">-->
+<!--          <el-menu-item index="1">-->
+<!--            <i class="el-icon-menu"></i>-->
+<!--            <span slot="title" @click="Clickall">全部类型问题</span>-->
+<!--          </el-menu-item>-->
+<!--          <div v-for="(x,i) in typeList">-->
+<!--            <el-menu-item :index="(i+2).toString()">-->
+<!--              <i class="el-icon-menu"></i>-->
+<!--              <span slot="title" @click="Click(x.id)">{{x.typename}}</span>-->
+<!--            </el-menu-item>-->
+<!--          </div>-->
+<!--        </el-menu>-->
       </el-aside>
-      <el-main>
+      <el-main :span="20">
         <div>
           <div class="meeting" >
             <el-input v-model="inputname" placeholder="模糊查找" size="mini"></el-input>
@@ -28,23 +48,34 @@
               <th>题目编号</th>
               <th>标题</th>
               <th>解决办法</th>
-              <th>类型</th>
+              <th v-if="typeVis==true">类型</th>
               <th>操作</th>
             </tr>
-            <tr v-for="(x,i) in questionList">
+            <tr v-for="(x,i) in currentPageData">
               <td width="20px">{{i+1}}</td>
               <td width="20px">{{x.id}}</td>
-              <td>{{x.title}}</td>
+              <td style="color: #00AAFF">{{x.title}}</td>
               <td>{{x.content}}</td>
-              <!--<td if="{{Item.id}}=={{x.type}}" v-for="Item in typeList">{{Item.typename}} </td>-->
-              <td>类型</td>
+              <td v-if="typeVis==true">{{x.typename}}</td>
               <td>
-                <span >查看</span>
+                <span class="span2" @click="View(x.id,x.uid)">查看</span>
               </td>
             </tr>
           </table>
         </div>
-
+        <div class="page">
+          <ul class="pagination pagination-sm"><!--分页-->
+            <li class="page-item" v-if="currentPage!=1">
+              <span class="page-link" v-on:click="prePage">上一页</span>
+            </li>
+            <li class="page-item" >
+              <span class="page-link" >第{{ currentPage }}页/共{{totalPage}}页</span>
+            </li>
+            <li class="page-item" v-if="currentPage!=totalPage">
+              <span class="page-link" v-on:click="nextPage">下一页</span>
+            </li>
+          </ul>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -59,59 +90,153 @@
             inputname:'',
             questionList:[],
             typeList:[],
-
+            typeVis :true,
+            // 翻页相关
+            currentPage: 1,
+            totalPage: 1,
+            pageSize: 30,
+            currentPageData:[]
           }
       },
       methods:{
+        //分页
+        setCurrentPageDate: function () {
+          let begin = (this.currentPage - 1) * this.pageSize;
+          let end = this.currentPage * this.pageSize;
+          this.currentPageData = this.questionList.slice(begin, end)
+        },
+        prePage() {
+          console.log(this.currentPage)
+          if (this.currentPage == 1)
+            return
+          this.currentPage--;
+          this.setCurrentPageDate()
+        },
+        nextPage() {
+          if (this.currentPage == this.totalPage) return
+          this.currentPage++;
+          this.setCurrentPageDate()
+        },
+          Clickall:function()
+          {
+            let that = this
+            that.getList()
+          },
+          View:function(id,uid) {
+            this.$router.push({
+              path:'/question/view',
+              query:{
+                qid:id,
+                uid:uid
+              }
+            })
+          },
         Click:function(id){
           let that = this
+          that.typeVis = false
+          that.questionList=[]
           this.$http.post('/yii/question/index/query',{
             flag:4,
             id:id
           }).then(function (res) {
             console.log(res.data)
-            that.questionList = res.data.data
+            let List = res.data.data
+            for(let i=0;i<List.length;i++)
+            {
+              if(that.questionList.indexOf(List.id)>1)
+              {
+                that.questionList.splice(List.id,1)
+              }
+              else{
+                that.questionList.push({
+                  id:List[i].id,
+                  title:List[i].title,
+                  content:List[i].content,
+                  ctime:List[i].ctime,
+                  uid:List[i].uid,
+                  typename: that.getTypeName(List[i].id)
+                })
+              }
+            }
+            that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
+            that.totalPage=that.totalPage==0?1:that.totalPage
+            that.setCurrentPageDate()
           }).catch(function (error) {
             console.log(error)
           })
         },
-          Search:function()
-          {
+        Search:function() {
             this.$router.push({
-              path:'/search',
+              path:'/question/search',
               query:{
                 search:this.inputname
               }
             })
           },
-
-          getList:function () {
+        getList:function () {
             let that =this
             this.$http.post('/yii/question/index/query',{
               flag:1
             }).then(function (res) {
               console.log(res.data)
-              that.questionList = res.data.data
+              let List = res.data.data
+              for(let i=0;i<List.length;i++)
+              {
+                if(that.questionList.indexOf(List.id)>1)
+                {
+                  that.questionList.splice(List.id,1)
+                }
+                else{
+                  that.questionList.push({
+                    id:List[i].id,
+                    title:List[i].title,
+                    content:that.escapeHTML(List[i].content),
+                    ctime:List[i].ctime,
+                    uid:List[i].uid,
+                    typename: that.getTypeName(List[i].id)
+                  })
+                }
+              }
+              that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
+              that.totalPage=that.totalPage==0?1:that.totalPage
+              that.setCurrentPageDate()
             }).catch(function (error) {
               console.log(error)
             })
           },
+        escapeHTML:function(untrusted) {
+      // Escape untrusted input so that it can safely be used in a HTML response
+      // in HTML and in HTML attributes.
+          return untrusted.replace(/<[^>]+>/g, '')
+    },
         getType:function () {
             let that =this
-          this.$http.post('/yiiquestion/index/query',{
+          this.$http.post('/yii/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
             that.typeList = res.data.data
+            console.log(that.typeList)
           }).catch(function (error) {
             console.log(error)
           })
-        }
+        },
+        getTypeName:function (id) {
+            let that = this
+            for(let j=0;j<that.typeList.length;j++)
+            {
+              if(id == that.typeList[j].id)
+              {
+                return that.typeList[j].typename
+              }
+            }
+        },
       },
       created(){
-          this.getList()
         this.getType()
-          console.log(this.questionList)
+        this.getList()
+        console.log(this.questionList)
+        console.log(this.typeList)
       }
     }
 </script>
@@ -171,5 +296,30 @@
 
   .btn2:hover {
     background-color: #5FA7FE;
+  }
+  .span2{
+    width: 50px;
+    padding: 7px;
+    font-size: 14px;
+    background-color: sandybrown;
+    margin-top: 15px;
+    color: white;
+    border: none;
+    border-radius: 3px ;
+  }
+  li{list-style-type:none;}
+  ul {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+  }
+  ul li {
+    list-style: none;
+    text-align: center;
+    line-height: 30px;
+    padding: 10px;
+    height: 30px;
+    width: 100px;
+    margin: 0 10px;
   }
 </style>
