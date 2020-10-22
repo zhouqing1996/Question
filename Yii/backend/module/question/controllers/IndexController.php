@@ -20,7 +20,8 @@ class IndexController extends Controller
      * 1:查找问题
      * 2：查找类型名
      * 3：模糊查找问题
-     * 4；按照问题类型查找对应 问题
+     * 4；按照问题类型id查找对应问题
+     * 5：按照w问题id查找问题
      */
     public function actionQuery()
     {
@@ -51,6 +52,7 @@ class IndexController extends Controller
                 ->Where(['or',
                     ['like', 'title', $search],
                     ['like', 'content', $search],
+                    ['like','id',$search],
                 ])
                 ->all();
             return array("data"=>$query,"msg"=>"查询".$search."问题");
@@ -65,6 +67,16 @@ class IndexController extends Controller
                 ->all();
             return array("data"=>$query,"msg"=>$id."问题查找");
         }
+        else if($flag==5)
+        {
+            $qid = $request->post('qid');
+            $query =(new Query())
+                ->select('*')
+                ->from('question')
+                ->Where(['id'=>$qid])
+                ->all();
+            return array("data"=>$query,"msg"=>$qid."问题查找");
+        }
 
     }
 
@@ -73,7 +85,13 @@ class IndexController extends Controller
         $request = \Yii::$app->request;
         $title = $request->post('title');
         $content = $request->post('content');
-        $type = $request->post('type');
+        $typename = $request->post('type');
+        $uid = $request->post('uid');
+        $ctime = date('Y-m-d H:i:s',time());
+        if($typename===null)
+        {
+            $typename='未知';
+        }
         $query = (new Query())
             ->select('*')
             ->from('question')
@@ -84,18 +102,36 @@ class IndexController extends Controller
         {
             return array("data"=>$query,"msg"=>"该问题已存在");
         }
-        $typeid = (new Query())
+        $type = (new Query())
             ->select('*')
             ->from('type')
-            ->Where(['typename'=>$type])
+            ->Where(['typename'=>$typename])
             ->one();
         $id = (new Query())
             ->select('*')
             ->from('question')
             ->max('id');
         $id = $id+1;
-        $insertU = \Yii::$app->db->createCommand()->insert('question',array('id'=>$id,'title'=>$title,'content'=>$content,'type'=>$typeid['id']))->execute();
+        if($type)
+        {
+            $insertU = \Yii::$app->db->createCommand()->insert('question',array('id'=>$id,'title'=>$title,
+                'content'=>$content,'type'=>$type['id'],'uid'=>$uid,'ctime'=>$ctime))->execute();
+        }
+        else{
+            $tid = (new Query())
+                ->select('*')
+                ->from('type')
+                ->max('id');
+            $tid = $tid+1;
+            $insertT = \Yii::$app->db->createCommand()->insert('type',array('id'=>$tid,
+                'typename'=>$typename))->execute();
+            $insertU1 = \Yii::$app->db->createCommand()->insert('question',array('id'=>$id,'title'=>$title,
+                'content'=>$content,'type'=>$tid,'uid'=>$uid,'ctime'=>$ctime))->execute();
+        }
+        return array("data"=>$title,"msg"=>"zhiz");
     }
+
+
 
 }
 
