@@ -9,28 +9,49 @@
             text-color="#FFFFFF"
             active-text-color="#ffd04b"
           float="right">
-            <el-menu-item>       </el-menu-item>
-            <el-menu-item>        </el-menu-item>
-            <el-menu-item index="1">处理中心</el-menu-item>
-            <el-submenu index="2">
-              <template slot="title">我的工作台</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-              <el-menu-item index="2-3">选项3</el-menu-item>
-              <el-submenu index="2-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="2-4-1">选项1</el-menu-item>
-                <el-menu-item index="2-4-2">选项2</el-menu-item>
-                <el-menu-item index="2-4-3">选项3</el-menu-item>
-              </el-submenu>
-            </el-submenu>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item index="1">
+              <router-link to="/u/question">
+                首页
+              </router-link>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <router-link to="/u/panalyse">
+                数据分析
+              </router-link>
+            </el-menu-item>
             <el-submenu index="3">
               <template slot="title">
-                <div>
-                  <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">注销</el-avatar>
-                </div>
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">注销</el-avatar>
               </template>
-              <el-menu-item index="3-1" v-on:click="logout" >注销
+              <el-menu-item index="3-1"><router-link to="/my">我的资料</router-link></el-menu-item>
+              <el-menu-item index="3-2"><router-link to="/changepwd">修改密码</router-link></el-menu-item>
+              <el-menu-item index="3-3" v-on:click="logout" >注销
               </el-menu-item>
             </el-submenu>
 
@@ -40,7 +61,7 @@
           <router-view/>
         </el-main>
         <el-footer class="footer">
-          <!--<p>Copyrights©{{CurrentYear}} by zhouqing.</p>-->
+          <p>Copyrights©{{CurrentYear}} by zhouqing.</p>
         </el-footer>
       </el-container>
     </div>
@@ -113,7 +134,13 @@
     width: 100%;
     text-align: center;
     height: 30px;/*脚部的高度*/
-    /*background: #6cf;*/
     clear:both;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
+  .router-link-active {
+    text-decoration: none;
   }
 </style>

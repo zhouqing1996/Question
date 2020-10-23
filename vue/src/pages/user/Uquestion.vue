@@ -1,24 +1,36 @@
 <template>
   <div >
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="300px">
         <div class="aside">
-          <el-menu
-            class="el-menu-vertical-demo"
-          >
-            <div>
-              <el-menu-item index="1">
-                <span slot="title" @click="Clickall" class="span"><i class="el-icon-menu">全部类型</i></span>
-              </el-menu-item>
-              <div v-for="(x,i) in typeList">
-                <el-menu-item :index="(i+2).toString()">
-                    <span slot="title" @click="Click(x.id)" class="span">
-                      <i class="el-icon-picture-outline-round">{{x.typename}}</i>
-                    </span>
-                </el-menu-item>
-              </div>
-            </div>
-          </el-menu>
+          <table>
+            <tr >
+              <td @click="Clickall">
+                <i class="el-icon-menu">全部类型</i>
+              </td>
+            </tr>
+            <tr v-for="(x,i) in typeList" name="title">
+              <td slot="title" @click="Click(x.id)">
+                <i class="el-icon-picture-outline-round">{{x.typename}}</i>
+              </td>
+            </tr>
+          </table>
+          <!--<el-menu-->
+            <!--class=""-->
+          <!--&gt;-->
+            <!--<div>-->
+              <!--<el-menu-item index="1">-->
+                <!--<span slot="title" @click="Clickall" class="span"></span>-->
+              <!--</el-menu-item>-->
+              <!--<div v-for="(x,i) in typeList">-->
+                <!--<el-menu-item :index="(i+2).toString()">-->
+                    <!--<span slot="title" @click="Click(x.id)" class="span">-->
+                      <!--<i class="el-icon-picture-outline-round">{{x.typename}}</i>-->
+                    <!--</span>-->
+                <!--</el-menu-item>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</el-menu>-->
         </div>
       </el-aside>
       <el-main :span="20">
@@ -32,27 +44,18 @@
           </router-link>
         </div>
         <div >
-          <table>
-            <tr>
-              <th>序号</th>
-              <!--<th>题目编号</th>-->
-              <th>标题</th>
-              <th>解决办法</th>
-              <th v-if="typeVis==true">类型</th>
-              <th>操作</th>
-            </tr>
-            <tr v-for="(x,i) in currentPageData">
-              <td width="20px">{{i+1}}</td>
-              <!--<td width="20px">{{x.id}}</td>-->
-              <td style="color: #00AAFF">{{x.title}}</td>
-              <td>{{x.content}}</td>
-              <td v-if="typeVis==true">{{x.typename}}</td>
-              <td>
-                <span class="span2" @click="View(x.id,x.uid)">查看</span>
-                <span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span>
-              </td>
-            </tr>
-          </table>
+          <div v-for="(x,i) in currentPageData" class="detail">
+            <span class="typename">{{x.typename}}</span>
+            <a @click="View(x.id,x.uid)" class="title">{{x.title}}</a>
+            <p class="content">
+              {{x.content}}
+            </p>
+            <br>
+            <div>
+              <img src="../../assets/avter.png" class="avter"/>
+              <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
+            </div>
+          </div>
         </div>
         <div class="page">
           <ul class="pagination pagination-sm"><!--分页-->
@@ -166,7 +169,6 @@
               typename: that.getTypeName(List[i].id)
             })
           }
-
           that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
           that.totalPage=that.totalPage==0?1:that.totalPage
           that.setCurrentPageDate()
@@ -251,41 +253,96 @@
 
 <style scoped>
   .aside{
-    /*margin-top: 50px;*/
-    /*margin-right: 0px;*/
-    /*padding: 0;*/
-    /*float: left;*/
-    /*line-height: 30px;*/
-    /*font-size: 14px;*/
-    /*font-weight: bold;*/
+    width: auto;
+    margin-top: 50px;
+    font-size: 20px;
+    margin-left: 50px;
   }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 10px;
-    table-layout: fixed;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-  }
-  th {
+  table{
     font-size: 14px;
-    border: solid 1px #ccc;
-    font-weight: bold;
-    padding: 5px;
-    background-color: #F1F1F1;
-    text-align: center;
+    border-right: gray 1px solid;
+    line-height: 20px;
+    width: auto;
   }
-
-  table, td {
-    border: solid 1px #ccc;
-    padding: 5px;
+  table tr{
+    text-align: left;
+    height: 50px;
+    vertical-align: center;
+    width: 100px;
+    background-color: gold;
+    padding: 10px;
+    line-height: 20px;
+    color: #000;
+  }
+  .typename{
+    color: #e33e33;
+    background-color: rgba(227,62,51,0.1);
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: auto;
+    height: 20px;
+    line-height: 20px;
     text-align: center;
-    font-size: 18px;
+    font-size: 12px;
+    border-radius: 2px;
+  }
+  .detail {
+    border-collapse: collapse;
+    width: 80%;
+    margin-top: 5px;
     table-layout: fixed;
     white-space:nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+    padding: 5px;
+    text-align: left;
+    font-size: 18px;
+    border-bottom: 1px solid #f0f2f5;
+    position: relative;
+  }
+  .title{
+    display: inline-block;
+    font-size: 20px;
+    color: #000;
+    line-height: 30px;
+    padding-bottom: 4px;
+    font-weight: bold;
+    padding-left: 36px;
+  }
+  .content{
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 22px;
+    white-space: normal;
+    color: #999aaa;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .title {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+  }
+  .avter{
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  .fr{
+    float: right!important;
+  }
+  .time{
+    font-size: 12px;
+    color: #000;
   }
   .meeting{
     float:left;
@@ -332,7 +389,7 @@
   }
   /*删除*/
   .span1{
-    width: 100px;
+    width: auto;
     padding: 7px;
     font-size: 14px;
     border-radius: 3px;
@@ -346,16 +403,7 @@
   .span1:hover{
     background-color: #5FA7FE;
   }
-  .span2{
-    width: 50px;
-    padding: 7px;
-    font-size: 14px;
-    background-color: sandybrown;
-    margin-top: 15px;
-    color: white;
-    border: none;
-    border-radius: 3px ;
-  }
+
   li{list-style-type:none;}
   ul {
     display: flex;

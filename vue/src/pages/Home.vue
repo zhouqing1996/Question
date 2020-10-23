@@ -9,9 +9,33 @@
             text-color="#FFFFFF"
             active-text-color="#ffd04b"
           float="right">
-            <el-menu-item>       </el-menu-item>
-            <el-menu-item>        </el-menu-item>
-            <el-menu-item index="1">处理中心</el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-menu-item disabled>       </el-menu-item>
+            <el-menu-item disabled>        </el-menu-item>
+            <el-submenu index="1">
+            <template slot="title">数据分析</template>
+              <el-menu-item>
+                <router-link to="/question/analyse">
+                  整体分析
+                </router-link>
+              </el-menu-item>
+              <el-menu-item>
+                个体分析
+              </el-menu-item>
+            </el-submenu>
             <el-submenu index="2">
               <template slot="title">我的工作台</template>
               <el-menu-item index="2-1">选项1</el-menu-item>
@@ -30,8 +54,9 @@
                   <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">注销</el-avatar>
                 </div>
               </template>
-              <el-menu-item index="3-1" v-on:click="logout" >注销
-              </el-menu-item>
+              <el-menu-item index="3-1"><router-link to="/my">我的资料</router-link></el-menu-item>
+              <el-menu-item index="3-2"><router-link to="/changepwd">修改密码</router-link></el-menu-item>
+              <el-menu-item index="3-3" v-on:click="logout" >注销</el-menu-item>
             </el-submenu>
 
           </el-menu>
@@ -115,5 +140,11 @@
     height: 30px;/*脚部的高度*/
     /*background: #6cf;*/
     clear:both;
+  }
+  a {
+    text-decoration: none;
+  }
+  .router-link-active {
+    text-decoration: none;
   }
 </style>

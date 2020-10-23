@@ -32,29 +32,18 @@
           </router-link>
         </div>
         <div >
-          <table>
-            <tr>
-              <th>序号</th>
-              <!--<th>题目编号</th>-->
-              <th>标题</th>
-              <th>内容</th>
-              <th>创建人</th>
-              <th v-if="typeVis==true">类型</th>
-              <th>操作</th>
-            </tr>
-            <tr v-for="(x,i) in currentPageData">
-              <td width="20px">{{i+1}}</td>
-              <!--<td width="20px">{{x.id}}</td>-->
-              <td style="color: #00AAFF">{{x.title}}</td>
-              <td>{{x.content}}</td>
-              <td>{{x.uid}}</td>
-              <td v-if="typeVis==true">{{x.typename}}</td>
-              <td>
-                <span class="span2" @click="View(x.id,x.uid)">查看</span>
-                <span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span>
-              </td>
-            </tr>
-          </table>
+          <div v-for="(x,i) in currentPageData" class="detail">
+            <span class="typename">{{x.typename}}</span>
+            <a @click="View(x.id,x.uid)" class="title">{{x.title}}</a>
+            <p class="content">
+              {{x.content}}
+            </p>
+            <br>
+            <div>
+              <img src="../../assets/avter.png" class="avter"/>{{x.uid}}
+              <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
+            </div>
+          </div>
         </div>
         <div class="page">
           <ul class="pagination pagination-sm"><!--分页-->
@@ -276,33 +265,75 @@
     font-size: 14px;
     font-weight: bold;
   }
-  table {
+  .typename{
+    color: #e33e33;
+    background-color: rgba(227,62,51,0.1);
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 34px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 2px;
+  }
+  .detail {
     border-collapse: collapse;
-    width: 100%;
-    margin-top: 10px;
+    width: 80%;
+    margin-top: 5px;
     table-layout: fixed;
     white-space:nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
-  }
-  th {
-    font-size: 14px;
-    border: solid 1px #ccc;
-    font-weight: bold;
     padding: 5px;
-    background-color: #F1F1F1;
-    text-align: center;
-  }
-
-  table, td {
-    border: solid 1px #ccc;
-    padding: 5px;
-    text-align: center;
+    text-align: left;
     font-size: 18px;
-    table-layout: fixed;
-    white-space:nowrap;
-    overflow:hidden;
+    border-bottom: 1px solid #f0f2f5;
+    position: relative;
+  }
+  .title{
+    display: inline-block;
+    font-size: 20px;
+    color: #000;
+    line-height: 30px;
+    padding-bottom: 4px;
+    font-weight: bold;
+    padding-left: 36px;
+  }
+  .content{
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 22px;
+    white-space: normal;
+    color: #999aaa;
+    display: block;
+    overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .title {
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+  }
+  .avter{
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  .fr{
+    float: right!important;
+  }
+  .time{
+    font-size: 12px;
+    color: #000;
   }
   .meeting{
     float:left;

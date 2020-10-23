@@ -8,9 +8,12 @@ import Vuex from 'vuex'
 import 'element-ui/lib/theme-chalk/index.css';
 import Axios from 'axios'
 import store from './store/index'
-
+//编辑器
 import 'font-awesome/css/font-awesome.min.css'
 import initVueHtml5 from "./common/initVueHtml5.js";
+//图表
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 Vue.prototype.$http = Axios
 

@@ -19,9 +19,49 @@ import UviewQuestion from '../pages/user/Uviewquestion'
 import USearchQuestion from '../pages/user/Usearch'
 import UaddQuestion from '../pages/user/Uaddquestion'
 
+
+import SLineChart from '../components/SLineChart'
+import CalenderHeatmap from '../components/CalenderHeatmap'
+import Analyse from '../pages/question/Analyse'
+import PAnalyse from '../pages/question/PAnalyse'
+
+import My from '../pages/My'
+import ChangePwd from '../pages/Changepwd'
 export default new Router({
   mode:'history',
   routes: [
+    {
+      path:'/slinechart',
+      name:'slinechart',
+      meta:{
+        isLogin:false
+      },
+      component:SLineChart
+    },
+    {
+      path:'/heatmap',
+      name:'heatmap',
+      meta:{
+        isLogin:false
+      },
+      component:CalenderHeatmap
+    },
+    {
+      path:'/my',
+      name:'my',
+      meta:{
+        isLogin:true
+      },
+      component:My
+    },
+    {
+      path:'/changepwd',
+      name:'changepwd',
+      meta:{
+        isLogin:true
+      },
+      component:ChangePwd
+    },
     {
       //注册
       path: '/register',
@@ -96,7 +136,15 @@ export default new Router({
             isLogin:true,
           },
           component:Viewquestion
-        }
+        },
+        {
+          path:'/question/analyse',
+          name:'analyse',
+          meta:{
+            isLogin:true
+          },
+          component:Analyse
+        },
       ]
     },
     {
@@ -119,6 +167,14 @@ export default new Router({
             isLogin:true
           },
           component:USearchQuestion
+        },
+        {
+          path:'/u/panalyse',
+          name:'panalyse',
+          meta:{
+            isLogin:true
+          },
+          component:PAnalyse
         },
         {
           path:'/u/addquestion',
