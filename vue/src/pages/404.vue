@@ -1,13 +1,14 @@
 <template>
   <div>
     <p class="p404">404</p>
+    <p>未找到该地址！</p>
     <ul>
       <li>
         <a style="cursor:pointer" onclick="history.back()">返回上一级</a>
       </li>
-      <li>
-        <router-link to="/admin/index">首页</router-link>
-      </li>
+      <!--<li>-->
+        <!--<router-link to="/u/question">首页</router-link>-->
+      <!--</li>-->
     </ul>
   </div>
 </template>

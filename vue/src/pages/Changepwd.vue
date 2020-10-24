@@ -1,6 +1,10 @@
 <template>
     <!--修改密码-->
   <div>
+    <div class="back">
+      <el-page-header @back="back">
+      </el-page-header>
+    </div>
     <el-form class="change-container" label-position="left" label-width="0px">
       <h3 class="change_title">修改密码</h3>
       <el-form-item>
@@ -38,6 +42,22 @@
           }
       },
       methods:{
+        back:function()
+        {
+          let that = this
+          if(that.userrole==1)
+          {
+            this.$router.push({
+              path:'/question',
+            })
+          }
+          else {
+            this.$router.push({
+              path:'/u/question',
+            })
+          }
+
+        },
         showPass() {
           if (this.passwordVisible === "text") {
             this.passwordVisible = "password";
@@ -61,7 +81,7 @@
           //修改密码
           changePwd:function (newpwd,newpwds) {
             if(newpwd==newpwds) {
-              this.$http.post('/yii/home/user/changeuser', {
+              this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/changeuser', {
                 flag: 3,
                 userid: this.$store.getters.getsId,
                 password: newpwd
@@ -109,5 +129,8 @@
     text-align: center;
     color: #505458;
   }
-
+  .back{
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
 </style>

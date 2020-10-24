@@ -41,7 +41,7 @@
       },
       getData:function () {
         let that = this
-        that.$http.post('/yii/question/analyse/queryany',{
+        that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/analyse/queryany',{
 
         }).then(function (res) {
           console.log(res.data)
@@ -60,7 +60,7 @@
           console.log(err)
         });
 
-        that.$http.post('/yii/question/analyse/queryheatmap',{
+        that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/analyse/queryheatmap',{
         }).then(function (res) {
           console.log(res.data)
           let map  =res.data.data

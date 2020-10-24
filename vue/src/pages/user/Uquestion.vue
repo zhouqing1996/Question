@@ -87,7 +87,7 @@
           type:"warning"
         }).then(()=>{
           let that =this
-          that.$http.post('/yii/question/index/udelete',{
+          that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/udelete',{
             qid:id,
             uid:that.uid
           }).then(function (res) {
@@ -136,7 +136,7 @@
       Click:function(id){
         let that = this
         that.questionList=[]
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
           flag:4,
           id:id,
           uid:that.uid
@@ -181,7 +181,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
           flag:1,
           uid:that.uid
         }).then(function (res) {
@@ -214,7 +214,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
           flag:2,
           uid:this.uid
         }).then(function (res) {

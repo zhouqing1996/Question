@@ -23,24 +23,31 @@ class AnalyseController extends Controller
     {
         $request = \Yii::$app->request;
         $uid = $request->post('uid');
-        $queryTy = (new Query())
+        $query = (new Query())
             ->select('*')
-            ->from('type')
-            ->Where(['uid'=>$uid])
+            ->from('question')
+            ->where(['uid'=>$uid])
             ->all();
-        $list = array();
-        if($queryTy)
+        $lists = array();
+        if($query)
         {
-            for($i=0;$i<count($queryTy);$i++)
+            for($i=0;$i<count($query);$i++)
             {
-//
-                $queryq = (new Query())
+                $typename = (new Query())
                     ->select('*')
-                    ->from('question')
-                    ->where(['type'=>$queryTy[$i]['id']])
-                    ->count();
-                $list[$i]['tyname'] = $queryTy[$i]['typename'];
-                $list[$i]['num'] = $queryq;
+                    ->from('type')
+                    ->where(['id'=>$query[$i]['type']])
+                    ->one();
+                $lists[$i]= $typename['typename'];
+            }
+            $num = array_count_values($lists);
+            $list = array();
+            $i=0;
+            foreach ($num as $kv=>$v)
+            {
+                $list[$i]['tyname']=$kv;
+                $list[$i]['num']=$v;
+                $i++;
             }
             return array('data'=>$list,'msg'=>'个人分类数据');
         }
@@ -85,23 +92,54 @@ class AnalyseController extends Controller
      */
     public function actionQueryany()
     {
-        $queryTy = (new Query())
-            ->select('*')
-            ->from('type')
-            ->all();
-        $list = array();
-        for($i=0;$i<count($queryTy);$i++)
-        {
+//        $queryTy = (new Query())
+//            ->select('*')
+//            ->from('type')
+//            ->all();
+//        $list = array();
+//        for($i=0;$i<count($queryTy);$i++)
+//        {
+////
+//            $queryq = (new Query())
+//                ->select('*')
+//                ->from('question')
+//                ->where(['type'=>$queryTy[$i]['id']])
+//                ->count();
+//            $list[$i]['tyname'] = $queryTy[$i]['typename'];
+//            $list[$i]['num'] = $queryq;
+//        }
+//        return array('data'=>$list,'msg'=>'网站问题数据');
 //
-            $queryq = (new Query())
-                ->select('*')
-                ->from('question')
-                ->where(['type'=>$queryTy[$i]['id']])
-                ->count();
-            $list[$i]['tyname'] = $queryTy[$i]['typename'];
-            $list[$i]['num'] = $queryq;
+        $query = (new Query())
+            ->select('*')
+            ->from('question')
+            ->all();
+        $lists = array();
+        if($query)
+        {
+            for($i=0;$i<count($query);$i++)
+            {
+                $typename = (new Query())
+                    ->select('*')
+                    ->from('type')
+                    ->where(['id'=>$query[$i]['type']])
+                    ->one();
+                $lists[$i]= $typename['typename'];
+            }
+            $num = array_count_values($lists);
+            $list = array();
+            $i=0;
+            foreach ($num as $kv=>$v)
+            {
+                $list[$i]['tyname']=$kv;
+                $list[$i]['num']=$v;
+                $i++;
+            }
+            return array('data'=>$list,'msg'=>'网站分类数据');
         }
-        return array('data'=>$list,'msg'=>'网站问题数据');
+        else{
+            return array('data'=>[],'msg'=>"未创建新的分类");
+        }
     }
     /*
      * 管理员用户问题提交时间热力图
@@ -119,7 +157,6 @@ class AnalyseController extends Controller
             $time[$j] = explode(' ',$queryTime[$j]['ctime']);
             $time[$j] = $time[$j][0];
         }
-//        return array('data'=>$time,'msg'=>'用户时间表示');
         $time = array_count_values($time);
         $lists = array();
         $i=0;

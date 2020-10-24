@@ -158,7 +158,7 @@
                 type:"warning"
               }).then(()=>{
                 that.addList.type="未知"
-                that.$http.post('/yii/question/index/addquestion',{
+                that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/addquestion',{
                   title:that.addList.title,
                   content:that.addList.content,
                   type:that.addList.type,
@@ -181,7 +181,7 @@
             }
             else
             {
-              that.$http.post('/yii/question/index/addquestion',{
+              that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/addquestion',{
                 title:that.addList.title,
                 content:that.addList.content,
                 type:that.addList.type,
@@ -203,7 +203,7 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)

@@ -33,6 +33,7 @@ class IndexController extends Controller
             $query = (new Query())
                 ->select('*')
                 ->from('question')
+                ->orderBy(['id'=>SORT_DESC])
                 ->all();
             return array("data"=>$query,"msg"=>"全部问题");
         }
@@ -55,6 +56,7 @@ class IndexController extends Controller
                     ['like', 'content', $search],
                     ['like','id',$search],
                 ])
+                ->orderBy(['id'=>SORT_DESC])
                 ->all();
             return array("data"=>$query,"msg"=>"查询".$search."问题");
         }
@@ -65,6 +67,7 @@ class IndexController extends Controller
                 ->select('*')
                 ->from('question')
                 ->Where(['type'=>$id])
+                ->orderBy(['id'=>SORT_DESC])
                 ->all();
             return array("data"=>$query,"msg"=>$id."问题查找");
         }
@@ -226,6 +229,16 @@ class IndexController extends Controller
                 ->andWhere(['uid'=>$uid])
                 ->all();
             return array("data"=>$query,"msg"=>$qid."问题查找");
+        }
+        else if($flag==6)
+        {
+            $tid = $request->post('tid');
+            $query = (new Query())
+                ->select('*')
+                ->from('type')
+                ->where(['id'=>$tid])
+                ->one();
+            return array("data"=>$query,"msg"=>$tid);
         }
 
     }

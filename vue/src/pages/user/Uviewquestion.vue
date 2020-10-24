@@ -49,7 +49,7 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/uquery',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
             flag:5,
             qid:that.qid,
             uid:that.uid
@@ -79,7 +79,7 @@
     },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -91,7 +91,7 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/query',{
             flag:2
           }).then(function (res) {
             that.userList = res.data.data

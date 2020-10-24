@@ -92,7 +92,7 @@
               type:"warning"
             }).then(()=>{
               let that =this
-              that.$http.post('/yii/question/index/delete',{
+              that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/delete',{
                 qid:id
               }).then(function (res) {
                 console.log(res.data)
@@ -141,7 +141,7 @@
           let that = this
           that.typeVis = false
           that.questionList=[]
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:4,
             id:id
           }).then(function (res) {
@@ -183,7 +183,7 @@
         getList:function () {
             let that =this
           that.questionList=[]
-            this.$http.post('/yii/question/index/query',{
+            this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
               flag:1
             }).then(function (res) {
               console.log(res.data)
@@ -214,7 +214,7 @@
     },
         getType:function () {
             let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -236,7 +236,7 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)

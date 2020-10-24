@@ -44,7 +44,7 @@
           }
           console.log(this.registerForm.username);
           console.log(this.registerForm.password);
-          this.$http.post('/yii/home/index/register',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/index/register',{
             username:this.registerForm.username,
             password:this.registerForm.password
           }).then(res=>{

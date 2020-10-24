@@ -75,7 +75,7 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:3,
             name:that.name
           }).then(function (res) {
@@ -101,7 +101,7 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
             flag:2,
             uid:this.uid
           }).then(function (res) {

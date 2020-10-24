@@ -29,7 +29,8 @@ import PAnalyse from '../pages/user/PAnalyse'
 import My from '../pages/My'
 import ChangePwd from '../pages/Changepwd'
 export default new Router({
-  mode:'history',
+  // base:'/Question/vue',
+  // mode:'history',
   routes: [
     {
       path:'/slinechart',

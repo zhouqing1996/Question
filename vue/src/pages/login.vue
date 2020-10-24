@@ -45,7 +45,8 @@
         }
       },
       login() {
-        this.$http.post('/yii/home/index/login',{
+        console.log('/yii')
+        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/index/login',{
           username:this.loginForm.username,
           password:this.loginForm.password,
         }).then(res=>{

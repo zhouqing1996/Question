@@ -236,10 +236,10 @@ class UserController extends Controller
     {
         $request = \Yii::$app->request;
         $username = $request->post('addname');
-        $password = $request->post('addpwd');
+        $password = '123456';
         $passwordE = \backend\module\home\controllers\IndexController::PasswordEncry($password);
         $role = $request->post('addrole');
-        $status = $request->post('addstatus');
+//        $status = $request->post('addstatus');
         $userid = (new Query())
             ->select('*')
             ->from('user')
@@ -255,7 +255,7 @@ class UserController extends Controller
             return array("data"=>[$query],"msg"=>"该用户名已存在");
         }
         $insertU = \Yii::$app->db->createCommand()->insert('user',array('id'=>$id,'username'=>$username,'password'=>$passwordE,'role'=>$role,
-            'status'=>$status))->execute();
+            'status'=>1))->execute();
         if($insertU)
         {
             return array("data"=>[$username,$id],"msg"=>"用户添加成功");

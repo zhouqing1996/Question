@@ -46,7 +46,7 @@
         }
       },
       forget() {
-        this.$http.post('/yii/home/index/forget',{
+        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/index/forget',{
           username:this.forgetForm.username,
           password:this.forgetForm.password
         }).then(res=>{
