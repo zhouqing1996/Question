@@ -1,43 +1,49 @@
 <template>
-  <div style="text-align: left;padding: 20px;margin-left: 20px;margin-top: 20px">
-    <div>
-      <button class="btn2 el-icon-search" v-on:click="back">返回</button>
-      <span style="text-align: left">共{{qList.length}}个相关问题</span>
+  <div>
+    <div class="waimian">
+      <div class="back">
+        <el-page-header @back="back">
+        </el-page-header>共{{qList.length}}个相关问题
+      </div>
+      <div class="wenti">
+        <div v-for="(x,i) in currentPageData">
+          <h3>{{i+1}}:{{x.title}}     <span class="typename">{{x.typename}}</span></h3>
+          <span><i class="el-icon-date"></i> {{x.ctime}}</span>
+          <hr>
+          <div v-html="x.content">
+            {{x.content}}
+          </div>
+        </div>
+      </div>
+      <div class="page">
+        <ul class="pagination pagination-sm"><!--分页-->
+          <li class="page-item" v-if="currentPage!=1">
+            <span class="page-link" v-on:click="prePage">上一页</span>
+          </li>
+          <li class="page-item" >
+            <span class="page-link" >第{{ currentPage }}页/共{{totalPage}}页</span>
+          </li>
+          <li class="page-item" v-if="currentPage!=totalPage">
+            <span class="page-link" v-on:click="nextPage">下一页</span>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div v-for="(x,i) in currentPageData">
-      <h3>{{x.title}}</h3>
-      <span>问题创建人：{{x.uid}}|创建时间：{{x.ctime}}</span>
-      <hr>
-      <span>{{x.content}}</span>
-    </div>
-    <div class="page">
-      <ul class="pagination pagination-sm"><!--分页-->
-        <li class="page-item" v-if="currentPage!=1">
-          <span class="page-link" v-on:click="prePage">上一页</span>
-        </li>
-        <li class="page-item" >
-          <span class="page-link" >第{{ currentPage }}页/共{{totalPage}}页</span>
-        </li>
-        <li class="page-item" v-if="currentPage!=totalPage">
-          <span class="page-link" v-on:click="nextPage">下一页</span>
-        </li>
-      </ul>
-    </div>
-    <div>
-      <button class="btn2 el-icon-search" v-on:click="back">返回</button>
-    </div>
+
+
   </div>
 </template>
 
 <script>
     export default {
-        name: "Search",
+        name: "uSearch",
       data(){
           return{
             name:'',
             //查询的问题
             qList:[],
             uid:'',
+            typeList:[],
             // 翻页相关
             currentPage: 1,
             totalPage: 1,
@@ -54,9 +60,11 @@
         },
         //分页
         setCurrentPageDate: function () {
-          let begin = (this.currentPage - 1) * this.pageSize;
-          let end = this.currentPage * this.pageSize;
-          this.currentPageData = this.qList.slice(begin, end)
+          let that =this
+          let begin = (that.currentPage - 1) * that.pageSize;
+          let end = that.currentPage * that.pageSize;
+          that.currentPageData = that.qList.slice(begin, end)
+          console.log(that.currentPageData)
         },
         prePage() {
           console.log(this.currentPage)
@@ -72,35 +80,72 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/uquery',{
+          that.$http.post('/yii/question/index/uquery',{
             flag:3,
             name:that.name,
             uid:that.uid
           }).then(function (res) {
             console.log(res.data)
-            that.qList = res.data.data
+            let List = res.data.data
+            for(let i=0;i<List.length;i++)
+            {
+                that.qList.push({
+                  id: List[i].id,
+                  title: List[i].title,
+                  content: List[i].content,
+                  ctime: List[i].ctime,
+                  uid: List[i].uid,
+                  typename: that.getTypeName(List[i].type)
+              })
+            }
             that.totalPage =Math.ceil(that.qList.length/that.pageSize)
             that.totalPage=that.totalPage==0?1:that.totalPage
             that.setCurrentPageDate()
+            console.log(that.qList)
           }).catch(function (error) {
             console.log(error)
           })
+        },
+        getType:function () {
+          let that =this
+          this.$http.post('/yii/question/index/uquery',{
+            flag:2,
+            uid:this.uid
+          }).then(function (res) {
+            console.log(res.data)
+            that.typeList = res.data.data
+            console.log(that.typeList)
+          }).catch(function (error) {
+            console.log(error)
+          })
+        },
+        getTypeName:function (id) {
+          let that = this
+          for(let j=0;j<that.typeList.length;j++)
+          {
+            if(id == that.typeList[j].id)
+            {
+              return that.typeList[j].typename
+            }
+          }
         },
       },
       created(){
         this.uid = this.$store.getters.getsId
           this.name = this.$route.query.search
+        this.getType()
+        console.log(this.name)
         this.getList()
       }
     }
 </script>
 
 <style scoped>
-  li{list-style-type:none;}
-  .dialog1{
-    width: 350px;
-    height:400px;
+  .back{
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
+  li{list-style-type:none;}
   ul {
     display: flex;
     flex-flow: row nowrap;
@@ -115,21 +160,33 @@
     width: 100px;
     margin: 0 10px;
   }
-  .btn2 {
-    width: 100px;/*px*/
-    padding: 7px;
-    font-size: 14px;
-    border-radius: 3px;
-    border: none;
-    color: white;
-    background-color: #7F96FE;
-    float: left;
-    margin-left: 5px;
-    margin-top: 17px;
-    margin-bottom: 5px;
+  .waimian{
+    margin-top: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: white;
+    width: auto;
   }
-
-  .btn2:hover {
-    background-color: #5FA7FE;
+  .wenti{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: auto;
+    text-align: left;
+  }
+  .typename{
+    color: #e33e33;
+    background-color: rgba(227,62,51,0.1);
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: auto;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 2px;
   }
 </style>

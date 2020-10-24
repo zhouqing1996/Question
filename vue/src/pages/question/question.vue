@@ -1,25 +1,21 @@
 <template>
   <div >
     <el-container>
-      <el-aside width="200px">
-          <div class="aside">
-            <el-menu
-              class="el-menu-vertical-demo"
-              >
-              <div>
-                <el-menu-item index="1">
-                  <span slot="title" @click="Clickall" class="span"><i class="el-icon-menu">全部类型</i></span>
-                </el-menu-item>
-                <div v-for="(x,i) in typeList">
-                  <el-menu-item :index="(i+2).toString()">
-                    <span slot="title" @click="Click(x.id)" class="span">
-                      <i class="el-icon-picture-outline-round">{{x.typename}}</i>
-                    </span>
-                  </el-menu-item>
-                </div>
-              </div>
-            </el-menu>
-          </div>
+      <el-aside :span="4">
+        <div class="aside">
+          <table>
+            <tr >
+              <td @click="Clickall">
+                <a><i class="el-icon-menu">全部类型</i></a>
+              </td>
+            </tr>
+            <tr v-for="(x,i) in typeList" name="title">
+              <td slot="title" @click="Click(x.id)">
+                <a><i class="el-icon-picture-outline-round">{{x.typename}}</i></a>
+              </td>
+            </tr>
+          </table>
+        </div>
       </el-aside>
       <el-main :span="20">
         <div>
@@ -40,7 +36,9 @@
             </p>
             <br>
             <div>
-              <img src="../../assets/avter.png" class="avter"/>{{x.uid}}
+              <div class="Im">
+                <img src="../../assets/avter.png" class="avter"><span class="name">{{x.uid}}</span>
+              </div>
               <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
             </div>
           </div>
@@ -59,6 +57,11 @@
           </ul>
         </div>
       </el-main>
+      <el-aside :span="4">
+        <div class="aside">
+          <!--shisajsiajsang-->
+        </div>
+      </el-aside>
     </el-container>
   </div>
 </template>
@@ -77,7 +80,7 @@
             // 翻页相关
             currentPage: 1,
             totalPage: 1,
-            pageSize: 20,
+            pageSize: 10,
             currentPageData:[]
           }
       },
@@ -163,12 +166,19 @@
           })
         },
         Search:function() {
+          if(this.inputname.length==0)
+          {
+            this.$alert('内容为空', '警告', {
+              confirmButtonText: '确定',})
+          }
+          else {
             this.$router.push({
               path:'/question/search',
               query:{
                 search:this.inputname
               }
             })
+          }
           },
         getList:function () {
             let that =this
@@ -257,13 +267,30 @@
 
 <style scoped>
   .aside{
+    width: auto;
     margin-top: 50px;
-    margin-right: 0px;
-    padding: 0;
-    float: left;
-    line-height: 30px;
+    font-size: 20px;
+    margin-left: 50px;
+    background-color: deepskyblue;
+    margin-right: 50px;
+    border-radius: 10px;
+  }
+  table{
     font-size: 14px;
-    font-weight: bold;
+    line-height: 20px;
+    width: auto;
+  }
+  table td{
+    text-align: left;
+    height: 50px;
+    vertical-align: center;
+    width: 100px;
+    background-color: transparent;
+    line-height: 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
+    padding-left: 20px;
   }
   .typename{
     color: #e33e33;
@@ -271,7 +298,7 @@
     display: inline-block;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    width: 34px;
+    width: auto;
     height: 20px;
     line-height: 20px;
     text-align: center;
@@ -320,13 +347,27 @@
     font-weight: bold;
   }
   .avter{
-    display: block;
+    display: flex;
     width: 24px;
     height: 24px;
     border-radius: 50%;
     -o-object-fit: cover;
     object-fit: cover;
     overflow: hidden;
+  }
+  .Im{
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    float: left;
+  }
+  .name{
+    float: left;
+    font-size: 14px;
+    color: #8a8a8a;
+    line-height: 24px;
+    margin-top: 0;
   }
   .fr{
     float: right!important;
@@ -418,5 +459,18 @@
     height: 30px;
     width: 100px;
     margin: 0 10px;
+  }
+  a:link{
+    color: dodgerblue;
+    text-decoration:none;
+  }
+  a:visited{
+    color: deepskyblue;
+  }
+  a:hover{
+    color: yellowgreen;
+  }
+  a:active{
+    color: yellow;
   }
 </style>

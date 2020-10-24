@@ -1,23 +1,21 @@
 <template>
   <div>
 
-    <div style="float:left;text-align: left">
-      <div style="float: right">
-        <button class="btn2 el-icon-search" v-on:click="back">返回</button>
+    <div class="waimian">
+      <div class="back">
+        <el-page-header @back="back">
+        </el-page-header>
       </div>
       <br>
-      <h3>{{qList.title}}</h3>
-      <span><i class="el-icon-user"></i> 问题创建人：{{qList.uid}}
-        <i class="el-icon-s-flag"></i> 问题类型：{{qList.typename}}
-        <i class="el-icon-date"></i> 创建时间：{{qList.ctime}}</span>
-      <hr>
-      <div v-html="qList.content">
-        {{qList.content}}
+      <div class="wenti">
+        <h3><span class="typename">{{qList.typename}}</span>      {{qList.title}}</h3>
+        <span><i class="el-icon-user"></i></span>
+        <span><i class="el-icon-date"></i> {{qList.ctime}}</span>
+        <hr>
+        <div v-html="qList.content">
+          {{qList.content}}
+        </div>
       </div>
-      <div>
-        <button class="btn2 el-icon-search" v-on:click="back">返回</button>
-      </div>
-<!--      <span>{{qList[0].content}}</span>-->
     </div>
 
   </div>
@@ -93,8 +91,8 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/queryrole3',{
-
+          this.$http.post('/yii/home/user/query',{
+            flag:2
           }).then(function (res) {
             that.userList = res.data.data
           })
@@ -132,21 +130,37 @@
 </script>
 
 <style scoped>
-  .btn2 {
-    width: 100px;/*px*/
-    padding: 7px;
-    font-size: 14px;
-    border-radius: 3px;
-    border: none;
-    color: white;
-    background-color: #7F96FE;
-    float: left;
-    margin-left: 5px;
-    margin-top: 17px;
-    margin-bottom: 5px;
+  .back{
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
-
-  .btn2:hover {
-    background-color: #5FA7FE;
+  .waimian{
+    margin-top: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: white;
+    width: auto;
+  }
+  .wenti{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: auto;
+    text-align: left;
+  }
+  .typename{
+    color: #e33e33;
+    background-color: rgba(227,62,51,0.1);
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: auto;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 2px;
   }
 </style>

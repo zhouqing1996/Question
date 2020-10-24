@@ -35,17 +35,17 @@
             <el-menu-item disabled>        </el-menu-item>
             <el-menu-item disabled>       </el-menu-item>
             <el-menu-item disabled>        </el-menu-item>
-            <el-menu-item index="1">
+            <el-menu-item index="1" style="font-size: 16px">
               <router-link to="/u/question">
                 首页
               </router-link>
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="2" style="font-size: 16px">
               <router-link to="/u/panalyse">
                 数据分析
               </router-link>
             </el-menu-item>
-            <el-submenu index="3">
+            <el-submenu index="3" >
               <template slot="title">
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">注销</el-avatar>
               </template>
@@ -57,7 +57,7 @@
 
           </el-menu>
         </el-header>
-        <el-main class="main">
+        <el-main class="main" v-bind:style="{minHeight: Height+'px'}">
           <router-view/>
         </el-main>
         <el-footer class="footer">
@@ -74,7 +74,8 @@
         var copyright=new Date();
         var update=copyright.getFullYear()
           return {
-            CurrentYear:update
+            CurrentYear:update,
+            Height:0
           }
       },
       methods: {
@@ -97,6 +98,12 @@
       },
       created(){
 
+      },
+      mounted(){
+        //动态设置内容高度 让footer始终居底   header+footer的高度是100
+        this.Height = document.documentElement.clientHeight - 50;
+        //监听浏览器窗口变化　
+        window.onresize = ()=> {this.Height = document.documentElement.clientHeight -50}
       }
     }
 </script>
@@ -114,7 +121,7 @@
     z-index: 50;
     /*background-image: none;*/
     background-color: #3686f1;
-    font-size: 14px;
+    font-size: 20px;
     color: white;
     width: 100%;
     border-color: #1995dc;

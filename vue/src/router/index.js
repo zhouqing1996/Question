@@ -6,6 +6,7 @@ import Home from '../pages/Home'
 import Search from '../pages/question/Search'
 import Add from '../pages/question/Addquestion'
 import Viewquestion from '../pages/question/Viewquestion'
+import User from '../pages/question/User'
 
 import Register from '../pages/register'
 import Forget from '../pages/forget'
@@ -23,7 +24,7 @@ import UaddQuestion from '../pages/user/Uaddquestion'
 import SLineChart from '../components/SLineChart'
 import CalenderHeatmap from '../components/CalenderHeatmap'
 import Analyse from '../pages/question/Analyse'
-import PAnalyse from '../pages/question/PAnalyse'
+import PAnalyse from '../pages/user/PAnalyse'
 
 import My from '../pages/My'
 import ChangePwd from '../pages/Changepwd'
@@ -145,6 +146,14 @@ export default new Router({
           },
           component:Analyse
         },
+        {
+          path:'/question/user',
+          name:'user',
+          meta:{
+            isLogin:true
+          },
+          component:User
+        }
       ]
     },
     {

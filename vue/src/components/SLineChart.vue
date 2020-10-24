@@ -1,6 +1,6 @@
 <template>
-  <div class="echarts_outer">
-      <div id="SLineChart" :style="{height: '400px',width:'400px'}"></div>
+  <div>
+      <div id="SLineChart" :style="{height: '400px',width:'80%'}"></div>
   </div>
 </template>
 <script>
@@ -10,24 +10,29 @@
       return {
         data: [],
         tyname: [],
-        count: []
+        count: [],
+        stitle:''
       };
     },
-    props: ["all"],
+    props: ["all","title"],
     mounted() {
       this.init();
     },
     watch: {
       all(oldVal, newVal) {
         this.drawLine();
+      },
+      title(oldVal, newVal) {
+        this.drawLine();
       }
     },
     methods: {
       init() {
         this.drawLine();
+        console.log(this.title)
       },
       drawLine() {
-        this.toArray(this.all);
+        this.toArray(this.all,this.stitle);
         // 基于准备好的dom，初始化echarts实例
         let myChart = this.$echarts.init(
           document.getElementById("SLineChart")
@@ -36,12 +41,16 @@
         myChart.setOption(
           {
             grid: {
-              x: 20,
-              y: 50,
-              x2: 10,
-              y2: 10,
+              left: '3%',
+              right: '4%',
+              bottom: '5%',
               height: '200px',
-              width:'300px'
+              width:'70%'
+            },
+            title:{
+              top:30,
+              left:'left',
+              text:this.title
             },
             xAxis: {
               type: "category",
@@ -116,9 +125,10 @@
           true
         );
       },
-      toArray(arr) { // 对数据进行格式处理
+      toArray(arr,til) { // 对数据进行格式处理
         this.tyname = [];
         this.count = [];
+        this.stitle = til
         if (arr != null) {
           arr.forEach((value, index) => {
             this.tyname.push(value.tyname);
@@ -138,7 +148,7 @@
   .echarts_outer {
     display: inline-block;
     width: 80%;
-    height: 100%;
+    height: 600px;
     /*border: 1px solid #d3d3d5;*/
     border-radius: 6px;
   }

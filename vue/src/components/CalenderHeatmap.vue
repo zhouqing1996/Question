@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div id="calenderHeatmap" :style="{height:'300px',width:'50%'}"></div>
+  <div id="calenderHeatmap" :style="{height:'300px',width:'60%'}"></div>
 </div>
 </template>
 
@@ -13,14 +13,19 @@
           return{
             data:[],
             nyear:years,
+            htitle:'',
+            maxNum:0
           }
       },
-      props:['heatmap'],
+      props:['heatmap','title'],
       mounted(){
           this.init()
       },
       watch: {
         heatmap(oldVal, newVal) {
+          this.CalenderMap();
+        },
+        title(oldVal, newVal) {
           this.CalenderMap();
         }
       },
@@ -28,21 +33,27 @@
           init:function(){
           //  初始化
             this.CalenderMap()
+            console.log(this.htitle)
           },
-        toData:function(year,datas){
+        toData:function(year,datas,stitle){
             let that =this
+          that.htitle = stitle
             for(let i=0;i<datas.length;i++)
             {
                 that.data.push([
                   datas[i].dates,datas[i].num
                 ])
+              if(datas[i].num>that.maxNum)
+              {
+                that.maxNum = datas[i].num
+              }
             }
           console.log(that.data)
         },
         CalenderMap:function () {
             let that =this
           console.log(that.heatmap)
-          that.toData(that.nyear,that.heatmap)
+          that.toData(that.nyear,that.heatmap,that.title)
           let map = that.$echarts.init(document.getElementById('calenderHeatmap'))
           map.setOption({
             grid: {
@@ -55,13 +66,14 @@
             },
             title:{
               top:30,
-              left:'center',
-              // text:this.nyear+'年个人问题总结数'
+              left:'left',
+              text:that.htitle
             },
             tooltip: {},
             visualMap:{
               min:0,
-              max:5,
+              max:that.maxNum,
+              minInterval:1,
               type:'piecewise',
               orient:'horizontal',
               left:'center',

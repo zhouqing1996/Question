@@ -1,17 +1,17 @@
 <template>
     <div>
-      <div>
-
-      </div>
-      <div>
-        <span>个人创建的问题中的类别分析</span>
-        <hr>
-        <SLineChart :all="tyList">
-        </SLineChart>
-        <hr>
-        <CalenderHeatmap :heatmap="hList">
-
-        </CalenderHeatmap>
+      <div class="waimian">
+        <div class="back">
+          <el-page-header @back="back">
+          </el-page-header>
+        </div>
+        <div class="draw">
+          <hr>
+          <SLineChart :all="tyList" :title="tytitle">
+          </SLineChart>
+          <hr>
+          <CalenderHeatmap :heatmap="hList" :title="htitle"></CalenderHeatmap>
+        </div>
       </div>
     </div>
 </template>
@@ -25,10 +25,18 @@
       data(){
           return{
             tyList:[],
-            hList:[]
+            hList:[],
+            tytitle:'个人创建的问题中的类别分析',
+            htitle:'个人问题日历热点图'
           }
       },
       methods:{
+        back:function()
+        {
+          this.$router.push({
+            path:'/u/question',
+          })
+        },
           getData:function () {
             let that = this
             that.$http.post('/yii/question/analyse/personany',{
@@ -77,5 +85,22 @@
 </script>
 
 <style scoped>
-
+.back{
+  margin-top: 30px;
+}
+  .draw{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: auto;
+    text-align: center;
+  }
+  .waimian{
+    margin-top: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: white;
+    width: auto;
+  }
 </style>

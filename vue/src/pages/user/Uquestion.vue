@@ -1,39 +1,23 @@
 <template>
   <div >
     <el-container>
-      <el-aside width="300px">
+      <el-aside :span="4">
         <div class="aside">
           <table>
             <tr >
               <td @click="Clickall">
-                <i class="el-icon-menu">全部类型</i>
+                <a><i class="el-icon-menu">全部类型</i></a>
               </td>
             </tr>
             <tr v-for="(x,i) in typeList" name="title">
               <td slot="title" @click="Click(x.id)">
-                <i class="el-icon-picture-outline-round">{{x.typename}}</i>
+               <a><i class="el-icon-picture-outline-round">{{x.typename}}</i></a>
               </td>
             </tr>
           </table>
-          <!--<el-menu-->
-            <!--class=""-->
-          <!--&gt;-->
-            <!--<div>-->
-              <!--<el-menu-item index="1">-->
-                <!--<span slot="title" @click="Clickall" class="span"></span>-->
-              <!--</el-menu-item>-->
-              <!--<div v-for="(x,i) in typeList">-->
-                <!--<el-menu-item :index="(i+2).toString()">-->
-                    <!--<span slot="title" @click="Click(x.id)" class="span">-->
-                      <!--<i class="el-icon-picture-outline-round">{{x.typename}}</i>-->
-                    <!--</span>-->
-                <!--</el-menu-item>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</el-menu>-->
         </div>
       </el-aside>
-      <el-main :span="20">
+      <el-main :span="16">
         <div>
           <div class="meeting" >
             <el-input v-model="inputname" placeholder="模糊查找" size="mini"></el-input>
@@ -71,6 +55,9 @@
           </ul>
         </div>
       </el-main>
+      <el-aside :span="4">
+        <!--shiajsia-->
+      </el-aside>
     </el-container>
   </div>
 </template>
@@ -84,7 +71,6 @@
         inputname:'',
         questionList:[],
         typeList:[],
-        typeVis :true,
         uid:'',
         // 翻页相关
         currentPage: 1,
@@ -149,7 +135,6 @@
       },
       Click:function(id){
         let that = this
-        that.typeVis = false
         that.questionList=[]
         this.$http.post('/yii/question/index/uquery',{
           flag:4,
@@ -157,6 +142,8 @@
           uid:that.uid
         }).then(function (res) {
           console.log(res.data)
+          console.log(id)
+          that.getType()
           let List = res.data.data
           for(let i=0;i<List.length;i++)
           {
@@ -166,9 +153,10 @@
               content:List[i].content,
               ctime:List[i].ctime,
               uid:List[i].uid,
-              typename: that.getTypeName(List[i].id)
+              typename: that.getTypeName(List[i].type)
             })
           }
+          console.log(that.questionList)
           that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
           that.totalPage=that.totalPage==0?1:that.totalPage
           that.setCurrentPageDate()
@@ -177,12 +165,19 @@
         })
       },
       Search:function() {
-        this.$router.push({
-          path:'/u/search',
-          query:{
-            search:this.inputname
-          }
-        })
+        if(this.inputname.length==0)
+        {
+          this.$alert('内容为空', '警告', {
+            confirmButtonText: '确定',})
+        }
+        else{
+          this.$router.push({
+            path:'/u/search',
+            query:{
+              search:this.inputname
+            }
+          })
+        }
       },
       getList:function () {
         let that =this
@@ -191,6 +186,7 @@
           uid:that.uid
         }).then(function (res) {
           console.log(res.data)
+          that.getType()
           that.questionList=[]
           let List = res.data.data
           for(let i=0;i<List.length;i++)
@@ -257,22 +253,27 @@
     margin-top: 50px;
     font-size: 20px;
     margin-left: 50px;
+    background-color: deepskyblue;
+    margin-right: 50px;
+    border-radius: 10px;
   }
   table{
     font-size: 14px;
-    border-right: gray 1px solid;
+    /*border-right: gray 1px solid;*/
     line-height: 20px;
     width: auto;
   }
-  table tr{
+  table td{
     text-align: left;
     height: 50px;
     vertical-align: center;
     width: 100px;
-    background-color: gold;
-    padding: 10px;
+    background-color: transparent;
     line-height: 20px;
-    color: #000;
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
+    padding-left: 20px;
   }
   .typename{
     color: #e33e33;
@@ -418,5 +419,18 @@
     height: 30px;
     width: 100px;
     margin: 0 10px;
+  }
+  a:link{
+    color: dodgerblue;
+    text-decoration:none;
+  }
+  a:visited{
+    color: deepskyblue;
+  }
+  a:hover{
+    color: yellowgreen;
+  }
+  a:active{
+    color: yellow;
   }
 </style>

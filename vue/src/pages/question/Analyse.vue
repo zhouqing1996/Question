@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div>
-
-    </div>
-    <div>
-      <span>所有用户的数据分类整合</span>
-
-      <SLineChart :all="atyList">
-      </SLineChart>
-      <hr>
-      <!--<span>所有用户累计提交问题热点图</span>-->
-      <CalenderHeatmap :heatmap="HMList"></CalenderHeatmap>
+    <div class="waimian">
+      <div class="back">
+        <el-page-header @back="back">
+        </el-page-header>
+      </div>
+      <div class="draw">
+        <hr>
+        <SLineChart :all="atyList" :title="tytitle">
+        </SLineChart>
+        <hr>
+        <CalenderHeatmap :heatmap="HMList" :title="htitle"></CalenderHeatmap>
+      </div>
     </div>
   </div>
 </template>
@@ -26,14 +27,22 @@
         //类型数据
         atyList:[],
         //热点图数据
-        HMList:[]
+        HMList:[],
+        tytitle:'网站中各类型问题汇总',
+        htitle:"网站中问题提交日历热点图"
       }
     },
     methods:{
+      back:function()
+      {
+        this.$router.push({
+          path:'/question',
+        })
+      },
       getData:function () {
         let that = this
         that.$http.post('/yii/question/analyse/queryany',{
-          uid:that.$store.getters.getsId
+
         }).then(function (res) {
           console.log(res.data)
           that.atyList = []
@@ -77,5 +86,22 @@
 </script>
 
 <style scoped>
-
+  .back{
+    margin-top: 30px;
+  }
+  .draw{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: auto;
+    text-align: center;
+  }
+  .waimian{
+    margin-top: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: white;
+    width: auto;
+  }
 </style>
