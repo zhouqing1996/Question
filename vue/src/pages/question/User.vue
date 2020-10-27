@@ -125,7 +125,7 @@
         },
         getUserList(){
           let that =this
-          that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/query',{
+          that.$http.post('/yii/home/user/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -142,7 +142,7 @@
             cancelButtonText:'取消',
             type:"warning"
           }).then(()=>{
-            that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/deleteuser',{
+            that.$http.post('/yii/home/user/deleteuser',{
               flag:2,
               userid:id
             }).then(function (res) {
@@ -166,7 +166,7 @@
           }
           else
           {
-            that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/adduser',{
+            that.$http.post('/yii/home/user/adduser',{
               addname:that.addUser.username,
               addrole:that.addUser.role
             }).then(function (res) {
@@ -238,7 +238,7 @@
                 data: JSON.stringify(_this.memberList)
               }
               console.log(data)
-              _this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/importexcel', data).then(body => {
+              _this.$http.post('/yii/home/user/importexcel', data).then(body => {
                 alert(body.data.message)
                 _this.getUserList()
               })

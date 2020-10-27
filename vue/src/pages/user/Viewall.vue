@@ -17,15 +17,12 @@
           </table>
         </div>
       </el-aside>
-      <el-main :span="20">
+      <el-main :span="16">
         <div>
           <div class="meeting" >
             <el-input v-model="inputname" placeholder="模糊查找" size="mini"></el-input>
           </div>
           <button class="btn2 el-icon-search" v-on:click="Search">搜索问题</button>
-          <router-link :to="{ name: 'Add' }">
-            <button class="btn2 el-icon-circle-plus-outline">添加问题</button>
-          </router-link>
         </div>
         <div >
           <div v-for="(x,i) in currentPageData" class="detail">
@@ -39,7 +36,7 @@
               <div class="Im">
                 <img src="../../assets/avter.png" class="avter"><span class="name">{{x.uid}}</span>
               </div>
-              <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
+              <span class="time fr">{{x.ctime}}</span>
             </div>
           </div>
         </div>
@@ -58,9 +55,7 @@
         </div>
       </el-main>
       <el-aside :span="4">
-        <div class="aside">
-          <!--shisajsiajsang-->
-        </div>
+        <!--shiajsia-->
       </el-aside>
     </el-container>
   </div>
@@ -68,42 +63,22 @@
 
 <script>
     export default {
-        name: "question",
-      data(){
-          return{
-            //数据返回
-            inputname:'',
-            questionList:[],
-            userList:[],
-            typeList:[],
-            typeVis :true,
-            // 翻页相关
-            currentPage: 1,
-            totalPage: 1,
-            pageSize: 10,
-            currentPageData:[]
-          }
+      name: "View",
+      data() {
+        return {
+          //数据返回
+          inputname: '',
+          questionList: [],
+          typeList: [],
+          uid: '',
+          // 翻页相关
+          currentPage: 1,
+          totalPage: 1,
+          pageSize: 20,
+          currentPageData: []
+        }
       },
-      methods:{
-          Delete:function(id){
-            this.$confirm("是否删除该题目",{
-              confirmButtonText:"确定",
-              cancelButtonText:'取消',
-              type:"warning"
-            }).then(()=>{
-              let that =this
-              that.$http.post('/yii/question/index/delete',{
-                qid:id
-              }).then(function (res) {
-                console.log(res.data)
-                that.questionList =[]
-                that.getList()
-                alert(res.data.message)
-              })
-            }).catch(function (err) {
-              console.log(err)
-            })
-          },
+      methods: {
         //分页
         setCurrentPageDate: function () {
           let begin = (this.currentPage - 1) * this.pageSize;
@@ -122,100 +97,97 @@
           this.currentPage++;
           this.setCurrentPageDate()
         },
-          Clickall:function()
-          {
-            let that = this
-            that.questionList =[]
-            that.getList()
-          },
-          View:function(id,uid) {
-            this.$router.push({
-              path:'/question/view',
-              query:{
-                qid:id,
-                uid:uid
-              }
-            })
-          },
-        Click:function(id){
+        Clickall: function () {
+          let that = this
+          that.questionList = []
+          that.getList()
+        },
+        View: function (id, uid) {
+          this.$router.push({
+            path: '/u/viewview',
+            query: {
+              qid: id,
+              uid: uid
+            }
+          })
+        },
+        Click: function (id) {
           let that = this
           that.typeVis = false
-          that.questionList=[]
-          this.$http.post('/yii/question/index/query',{
-            flag:4,
-            id:id
+          that.questionList = []
+          this.$http.post('/yii/question/index/query', {
+            flag: 4,
+            id: id
           }).then(function (res) {
             console.log(res.data)
             let List = res.data.data
-            for(let i=0;i<List.length;i++)
-            {
+            for (let i = 0; i < List.length; i++) {
               that.questionList.push({
-                id:List[i].id,
-                title:List[i].title,
-                content:List[i].content,
-                ctime:List[i].ctime,
-                uid:that.getUserName(List[i].uid),
+                id: List[i].id,
+                title: List[i].title,
+                content: List[i].content,
+                ctime: List[i].ctime,
+                uid: that.getUserName(List[i].uid),
                 typename: that.getTypeName(List[i].type)
               })
             }
-            that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
-            that.totalPage=that.totalPage==0?1:that.totalPage
+            that.totalPage = Math.ceil(that.questionList.length / that.pageSize)
+            that.totalPage = that.totalPage == 0 ? 1 : that.totalPage
             that.setCurrentPageDate()
           }).catch(function (error) {
             console.log(error)
           })
         },
-        Search:function() {
-          if(this.inputname.length==0)
-          {
+        Search: function () {
+          if (this.inputname.length == 0) {
             this.$alert('内容为空', '警告', {
-              confirmButtonText: '确定',})
+              confirmButtonText: '确定',
+            })
           }
           else {
             this.$router.push({
-              path:'/question/search',
-              query:{
-                search:this.inputname
+              path: '/u/viewsear',
+              query: {
+                search: this.inputname
               }
             })
           }
-          },
-        getList:function () {
-            let that =this
-          that.questionList=[]
-            this.$http.post('/yii/question/index/query',{
-              flag:1
-            }).then(function (res) {
-              console.log(res.data)
-              let List = res.data.data
-              for(let i=0;i<List.length;i++)
-              {
-                  that.questionList.push({
-                    id:List[i].id,
-                    title:List[i].title,
-                    content:that.escapeHTML(List[i].content),
-                    ctime:List[i].ctime,
-                    uid:that.getUserName(List[i].uid),
-                    typename: that.getTypeName(List[i].type)
-                  })
-              }
-              console.log(that.questionList)
-              that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
-              that.totalPage=that.totalPage==0?1:that.totalPage
-              that.setCurrentPageDate()
-            }).catch(function (error) {
-              console.log(error)
-            })
-          },
-        escapeHTML:function(untrusted) {
-      // Escape untrusted input so that it can safely be used in a HTML response
-      // in HTML and in HTML attributes.
+        },
+        getList: function () {
+          let that = this
+          that.questionList = []
+          this.$http.post('/yii/question/index/query', {
+            flag: 1
+          }).then(function (res) {
+            console.log(res.data)
+            let List = res.data.data
+            for (let i = 0; i < List.length; i++) {
+              that.questionList.push({
+                id: List[i].id,
+                title: List[i].title,
+                content: that.escapeHTML(List[i].content),
+                ctime: List[i].ctime,
+                uid: that.getUserName(List[i].uid),
+                typename: that.getTypeName(List[i].type)
+              })
+            }
+            console.log(that.questionList)
+            that.totalPage = Math.ceil(that.questionList.length / that.pageSize)
+            that.totalPage = that.totalPage == 0 ? 1 : that.totalPage
+            that.setCurrentPageDate()
+          }).catch(function (error) {
+            console.log(error)
+          })
+        },
+        escapeHTML: function (untrusted) {
+          // Escape untrusted input so that it can safely be used in a HTML response
+          // in HTML and in HTML attributes.
           return untrusted.replace(/<[^>]+>/g, '')
-    },
-        getType:function () {
-            let that =this
-          this.$http.post('/yii/question/index/query',{
-            flag:2
+        },
+        getType: function () {
+          let that = this
+          this.$http.post('/yii/question/index/query', {
+            flag: 2
           }).then(function (res) {
             console.log(res.data)
             that.typeList = res.data.data
@@ -224,37 +196,33 @@
             console.log(error)
           })
         },
-        getTypeName:function (id) {
-            let that = this
-            for(let j=0;j<that.typeList.length;j++)
-            {
-              if(id == that.typeList[j].id)
-              {
-                return that.typeList[j].typename
-              }
+        getTypeName: function (id) {
+          let that = this
+          for (let j = 0; j < that.typeList.length; j++) {
+            if (id == that.typeList[j].id) {
+              return that.typeList[j].typename
             }
+          }
         },
-        getUser:function(){
-          let that =this
-          this.$http.post('/yii/home/user/query',{
-            flag:2
+        getUser: function () {
+          let that = this
+          this.$http.post('/yii/home/user/query', {
+            flag: 2
           }).then(function (res) {
             console.log(res.data)
             that.userList = res.data.data
           })
         },
-        getUserName:function(id){
-          let that =this
-          for(let k=0;k<that.userList.length;k++)
-          {
-            if(id==that.userList[k].id)
-            {
+        getUserName: function (id) {
+          let that = this
+          for (let k = 0; k < that.userList.length; k++) {
+            if (id == that.userList[k].id) {
               return that.userList[k].username
             }
           }
         },
       },
-      created(){
+      created() {
         this.getType()
         this.getUser()
         this.getList()
@@ -277,6 +245,7 @@
   }
   table{
     font-size: 14px;
+    /*border-right: gray 1px solid;*/
     line-height: 20px;
     width: auto;
   }
@@ -372,10 +341,6 @@
   .fr{
     float: right!important;
   }
-  .time{
-    font-size: 12px;
-    color: #000;
-  }
   .meeting{
     float:left;
     margin:14px 0 10px 0;
@@ -421,7 +386,7 @@
   }
   /*删除*/
   .span1{
-    width: 100px;
+    width: auto;
     padding: 7px;
     font-size: 14px;
     border-radius: 3px;
@@ -435,16 +400,7 @@
   .span1:hover{
     background-color: #5FA7FE;
   }
-  .span2{
-    width: 50px;
-    padding: 7px;
-    font-size: 14px;
-    background-color: sandybrown;
-    margin-top: 15px;
-    color: white;
-    border: none;
-    border-radius: 3px ;
-  }
+
   li{list-style-type:none;}
   ul {
     display: flex;

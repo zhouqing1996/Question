@@ -19,18 +19,26 @@ import UQuestion from '../pages/user/Uquestion'
 import UviewQuestion from '../pages/user/Uviewquestion'
 import USearchQuestion from '../pages/user/Usearch'
 import UaddQuestion from '../pages/user/Uaddquestion'
-
+import UView from '../pages/user/Viewall'
+import UViewview from '../pages/user/Viewview'
+import UViewSear from '../pages/user/ViewSear'
 
 import SLineChart from '../components/SLineChart'
 import CalenderHeatmap from '../components/CalenderHeatmap'
+import BarChart from '../components/BarChart'
+//测试
+import CalenderHeatmap1 from '../components/CalenderHeatmap1'
 import Analyse from '../pages/question/Analyse'
 import PAnalyse from '../pages/user/PAnalyse'
 
 import My from '../pages/My'
 import ChangePwd from '../pages/Changepwd'
+
+
+import Data from '../pages/home/Data'
 export default new Router({
   // base:'/Question/vue',
-  // mode:'history',
+  mode:'history',
   routes: [
     {
       path:'/slinechart',
@@ -49,12 +57,36 @@ export default new Router({
       component:CalenderHeatmap
     },
     {
+      path:'/heatmap1',
+      name:'heatmap1',
+      meta:{
+        isLogin:false
+      },
+      component:CalenderHeatmap1
+    },
+    {
+      path:'/barchart',
+      name:'barchart',
+      meta:{
+        isLogin:false
+      },
+      component:BarChart
+    },
+    {
       path:'/my',
       name:'my',
       meta:{
         isLogin:true
       },
       component:My
+    },
+    {
+      path:'/data',
+      name:'data',
+      meta:{
+        isLogin:false
+      },
+      component:Data
     },
     {
       path:'/changepwd',
@@ -162,6 +194,30 @@ export default new Router({
       name:'U',
       component:UHome,
       children: [
+        {
+          path:'/u/viewall',
+          name:'viewall',
+          meta:{
+            isLogin:true
+          },
+          component:UView
+        },
+        {
+          path:'/u/viewview',
+          name:'viewview',
+          meta:{
+            isLogin:true
+          },
+          component:UViewview
+        },
+        {
+          path:'/u/viewsear',
+          name:'viewsear',
+          meta:{
+            isLogin:true
+          },
+          component:UViewSear
+        },
         {
           path:'/u/question',
           name:'Uquestion',

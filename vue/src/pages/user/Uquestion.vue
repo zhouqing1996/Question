@@ -56,7 +56,14 @@
         </div>
       </el-main>
       <el-aside :span="4">
-        <!--shiajsia-->
+        <div>
+          <div class="personalData" @click="personalData" >
+            个人问题数据分析结果
+          </div>
+          <div class="allData" @click="allData">
+            查看全站问题数据
+          </div>
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -80,6 +87,16 @@
       }
     },
     methods:{
+      personalData:function(){
+        this.$router.push({
+          path:'/u/panalyse'
+        })
+      },
+      allData:function(){
+        this.$router.push({
+          path:'/u/viewall'
+        })
+      },
       Delete:function(id){
         this.$confirm("是否删除该题目",{
           confirmButtonText:"确定",
@@ -87,7 +104,7 @@
           type:"warning"
         }).then(()=>{
           let that =this
-          that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/udelete',{
+          that.$http.post('/yii/question/index/udelete',{
             qid:id,
             uid:that.uid
           }).then(function (res) {
@@ -136,7 +153,7 @@
       Click:function(id){
         let that = this
         that.questionList=[]
-        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
+        this.$http.post('/yii/question/index/uquery',{
           flag:4,
           id:id,
           uid:that.uid
@@ -181,7 +198,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
+        this.$http.post('/yii/question/index/uquery',{
           flag:1,
           uid:that.uid
         }).then(function (res) {
@@ -214,7 +231,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/uquery',{
+        this.$http.post('/yii/question/index/uquery',{
           flag:2,
           uid:this.uid
         }).then(function (res) {
@@ -248,6 +265,33 @@
 </script>
 
 <style scoped>
+  .personalData{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color: dodgerblue;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    vertical-align: middle;
+  }
+  .allData{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color:lightblue;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+  }
   .aside{
     width: auto;
     margin-top: 50px;

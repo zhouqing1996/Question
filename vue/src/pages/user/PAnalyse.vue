@@ -39,7 +39,7 @@
         },
           getData:function () {
             let that = this
-            that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/analyse/personany',{
+            that.$http.post('/yii/question/analyse/personany',{
               uid:that.$store.getters.getsId
             }).then(function (res) {
               console.log(res.data)
@@ -58,7 +58,7 @@
               console.log(err)
             });
 
-            that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/analyse/personheat',{
+            that.$http.post('/yii/question/analyse/personheat',{
               uid:that.$store.getters.getsId
             }).then(function (res) {
               console.log(res.data)
