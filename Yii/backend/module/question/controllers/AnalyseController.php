@@ -8,7 +8,8 @@ use yii\common\models\Type;
 use yii\db\Query;
 use yii\web\Response;
 use yii\web\Request;
-
+header("Access-Control-Allow-Origin: *");
+file_get_contents("php://input");
 class AnalyseController extends Controller
 {
     public function actionIndex()

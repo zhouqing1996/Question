@@ -14,10 +14,12 @@ use yii\filters\Cors;
 use yii\behaviors\TimestampBehavior;
 use backend\module\home\controllers\IndexController;
 use yii\data\Pagination;
-
+header("Access-Control-Allow-Origin: *");
+file_get_contents("php://input");
 /**
  * Default controller for the `home` module
  */
+
 class UserController extends Controller
 {
     public function actionIndex()
@@ -33,18 +35,17 @@ class UserController extends Controller
      */
     public function actionChangepassword()
     {
-//        $request = \Yii::$app->request;
-//        $username = $request->post('username');
+        $request = \Yii::$app->request;
+        $username = $request->post('username');
 //        $userid = $request->post('userid');
 //        两者知道一个即可
-        $userid = "2";
-        $password="zhouqing";
+//        $userid = "2";
+        $password=$request->post("password");
 
         $query = (new Query())
             ->select('*')
             ->from('user')
-            ->where(['id'=>$userid])
-            ->andWhere(['status'=>1])
+            ->where(['username'=>$username])
             ->one();
         if($query)
         {
@@ -55,7 +56,7 @@ class UserController extends Controller
             }
             else{
                 $passwordE = \backend\module\home\controllers\IndexController::PasswordEncry($password);
-                $update=\Yii::$app->db->createCommand()->update('user',['password'=>$passwordE],"id={$userid}")->execute();
+                $update=\Yii::$app->db->createCommand()->update('user',['password'=>$passwordE],"username={$username}")->execute();
                 if($update)
                 {
                     return array("data"=>[$update,$passwordE,$password],"msg"=>"修改密码成功");

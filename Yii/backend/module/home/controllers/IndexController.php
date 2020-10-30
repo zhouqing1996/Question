@@ -12,6 +12,9 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\filters\Cors;
 use yii\behaviors\TimestampBehavior;
+header("Access-Control-Allow-Origin: *");
+file_get_contents("php://input");
+
 
 /**
  * Default controller for the `home` module
@@ -83,9 +86,17 @@ class IndexController extends Controller
 
     	$request = \Yii::$app->request;
     	$username = $request->post('username');
+//		return array("data"=>$username,"msg"=>"该用户名已存在");
     	$password = $request->post('password');
-    	if($this->UsernameQuery($username)['msg']=='No')
-    	{
+		$query = (new Query())
+    		->select('*')
+    		->from('user')
+    		->Where(['username'=> $username])
+    		->one();
+		if($query){
+			return array("data"=>[],"msg"=>"该用户名已存在");
+		}
+    	else{
     		$passwordE = $this->PasswordEncry($password);
     		$role = 3;
     		$status = 1;
@@ -104,10 +115,6 @@ class IndexController extends Controller
     			return array("data"=>[$username,$passwordE],"msg"=>"注册失败");
     		}
 
-    	}
-    	else
-    	{
-    		return array("data"=>[],"msg"=>"该用户名已存在");
     	}
     }
     /*
