@@ -45,6 +45,26 @@ class IndexController extends Controller
                 ->from('type')
                 ->all();
             return array("data"=>$query,"msg"=>"全部类型");
+			// $query = (new Query())
+                // ->select('*')
+                // ->from('type')
+                // ->where(['uid'=>$uid])
+                // ->all();
+			// $querys = (new Query())
+				// ->select('*')
+				// ->from('question')
+				// ->where(['type'=>1)
+				// ->andwhere(['uid'=>$uid])
+				// ->one();
+			// if($querys)
+			// {
+				// $rt = array('id'=>1,'typename'=>'未知','uid'=>1);
+				// array_push($query,$rt);
+				// return array("data"=>$query,"msg"=>$uid."全部类型");
+			// }
+            // else{
+				// return array("data"=>$query,"msg"=>$uid."全部类型");
+			// }
         }
         else if($flag==3)
         {
@@ -184,14 +204,31 @@ class IndexController extends Controller
         }
         else if($flag==2)
         {
+			// $query = (new Query())
+                // ->select('*')
+                // ->from('type')
+                // ->all();
+            // return array("data"=>$query,"msg"=>"全部类型");
             $query = (new Query())
                 ->select('*')
                 ->from('type')
                 ->where(['uid'=>$uid])
                 ->all();
-            $rt = array('id'=>1,'typename'=>'未知','uid'=>1);
-            array_push($query,$rt);
-            return array("data"=>$query,"msg"=>$uid."全部类型");
+			$querys = (new Query())
+				->select('*')
+				->from('question')
+				->where(['type'=>1])
+				->andwhere(['uid'=>$uid])
+				->one();
+			if($querys)
+			{
+				$rt = array('id'=>1,'typename'=>'未知','uid'=>1);
+				array_push($query,$rt);
+				return array("data"=>$query,"msg"=>$uid."全部类型");
+			}
+            else{
+				return array("data"=>$query,"msg"=>$uid."全部类型");
+			}
         }
         else if($flag==3)
         {
@@ -241,6 +278,23 @@ class IndexController extends Controller
                 ->one();
             return array("data"=>$query,"msg"=>$tid);
         }
+		else if($flag==7)
+		{
+			$query = (new Query())
+                ->select('*')
+                ->from('question')
+                ->where(['uid'=>$uid])
+                ->all();
+			$tylist =[];
+			for($i=0;$i<count($query);$i++){
+			$tylist['id']=$query[$i]['type'];
+			$tylist['tyname']=$query[$i]['typename'];
+			$tylist['uid']=$query[$i]['uid'];
+			}
+            $rt = array('id'=>1,'typename'=>'未知','uid'=>1);
+            array_push($query,$rt);
+            return array("data"=>$query,"msg"=>$uid."全部类型");
+		}
 
     }
 
