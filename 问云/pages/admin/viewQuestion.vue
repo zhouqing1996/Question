@@ -1,9 +1,11 @@
 <template>
-	<view>
-		<view v-for="item in result">
-			<view class="typename">{{item.type}}</view>
-			<view class="title">{{item.title}}</view>
-			<rich-text :nodes="item.content" class="content"></rich-text>
+	<view v-if="flag==true">
+		<view v-for="item in result" class="detail">
+			<view @click="view(item.id,item.title,item.uid,item.ctime,item.content,item.type)">
+				<view class="typename">{{item.type}}</view>
+				<view class="title">{{item.title}}</view>
+				<rich-text :nodes="item.content" class="content"></rich-text>
+			</view>
 			<view >
 				<view class="Im">
 					<image src="../../static/images/avter.png" class="avter">
@@ -14,6 +16,9 @@
 			<view class="time fr">{{item.ctime}}</view>
 		</view>
 	</view>
+	<view v-else>
+		<view>没有找到关于<strong>{{name}}</strong>的内容！</view>
+	</view>
 </template>
 
 <script>
@@ -21,10 +26,29 @@
 		data(){
 			return{
 				name:'',
-				result:[]
+				result:[],
+				// 是否有查询的结果
+				flag:true
 			}
 		},
 		methods:{
+			view:function(id,title,uid,ctime,content,type){
+				console.log(id)
+				let list = []
+				list.push({
+					id:id,
+					title:title,
+					uid:uid,
+					ctime:ctime,
+					content:content,
+					type:type
+				})
+				uni.navigateTo({
+					// url:'./view?list='+id
+					// url:'./view?index='+mlist
+					url:'./view?id='+id+'&title='+title+'&uid='+uid+'&ctime='+ctime+'&content='+content+'&type='+type
+				})
+			},
 			getType:function(){
 				uni.request({
 					header: {
@@ -89,17 +113,24 @@
 					success:(res)=>{
 						console.log(res)
 						let List = res.data.data
-						this.result = []
-						for(let i=0;i<List.length;i++){
-							this.result.push({
-								id:List[i].id,
-								title:List[i].title,
-								content:List[i].content,
-								type:this.getTypeName(List[i].type),
-								uid:this.getUserName(List[i].uid),
-								ctime:List[i].ctime
-							})
+						if(res.data.data.length==0){
+							this.flag = false
 						}
+						else{
+							this.result = []
+							for(let i=0;i<List.length;i++){
+								this.result.push({
+									id:List[i].id,
+									title:List[i].title,
+									content:List[i].content,
+									type:this.getTypeName(List[i].type),
+									uid:this.getUserName(List[i].uid),
+									ctime:List[i].ctime
+								})
+							}
+							this.flag = true
+						}
+						
 					}
 				})
 			}
@@ -109,9 +140,9 @@
 			console.log(this.name)
 		},
 		created(){
-			this.Query()
 			this.getType()
 			this.getUser()
+			this.Query()
 		},
 		mounted(){
 			this.getType()
@@ -186,4 +217,18 @@
 	      line-height: 24px;
 	      margin-top: 0;
 	    }
+		.detail {
+		    border-collapse: collapse;
+		    width: 80%;
+		    margin-top: 5px;
+		    table-layout: fixed;
+		    white-space:nowrap;
+		    overflow:hidden;
+		    text-overflow: ellipsis;
+		    padding: 5px;
+		    text-align: left;
+		    font-size: 18px;
+		    border-bottom: 1px solid #f0f2f5;
+		    position: relative;
+		  }
 </style>

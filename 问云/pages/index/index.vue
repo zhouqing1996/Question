@@ -25,6 +25,7 @@
 			</view>
 			<image src="../../static/images/success.png"></image>
 		</view>
+		<!-- 学生 -->
 		<view v-else>学生</view>
 	</view>
 	<view v-else class="NotLogin">
@@ -127,7 +128,7 @@
 			if(this.$store.getters.getsId){
 				this.hasLogin =true,
 				this.username = this.$store.getters.getsName,
-				this.role = this.$store.getters.getsId
+				this.role = this.$store.getters.getsRole
 			}
 		}
 	}

@@ -4,7 +4,7 @@
 			<input v-model="serach" placeholder="搜索" class="sinput"/>
 			<button @click="serachA" class="sbutton">搜索</button>
 		</view>
-		<scroll-view class="leftList">
+		<scroll-view v-if="lFlag==true" class="leftList">
 			<view @click="getRightList" class="leftItem">
 				<view >全部类型</view>
 			</view>
@@ -12,11 +12,19 @@
 				<view @click="Click(item.id)">{{item.typename}}</view>
 			</view>
 		</scroll-view>
-		<scroll-view class="rightList" >
+		<scroll-view v-else  class="leftList">
+			<view @click="getRightList" class="leftItem">
+				<view >全部类型</view>
+			</view>
+		</scroll-view>
+		<!-- 右边 -->
+		<scroll-view class="rightList"  v-if="rFlag==true">
 			<view v-for="(itemr,ix) in rightData" :key="ix" class="rightItem">
-				<view class="typename">{{itemr.type}}</view>
-				<view class="title">{{itemr.title}}</view>
-				<rich-text :nodes="itemr.content" class="content"></rich-text>
+				<view @click="view(itemr.id,itemr.title,itemr.uid,itemr.ctime,itemr.content,itemr.type)">
+					<view class="typename">{{itemr.type}}</view>
+					<view class="title">{{itemr.title}}</view>
+					<rich-text :nodes="itemr.content" class="content"></rich-text>
+				</view>
 				<view >
 					<view class="Im">
 						<image src="../../static/images/avter.png" class="avter">
@@ -25,7 +33,13 @@
 					</view>
 				</view>
 				<view class="time fr">{{itemr.ctime}}</view>
+				<view class="time fr" >
+					<button @click="sdelete(itemr.id)">删除</button>
+				</view>
 			</view>
+		</scroll-view>
+		<scroll-view v-else class="rightList">
+			<view>{{uname}}还没有问题</view>
 		</scroll-view>
 	</view>
 </template>
@@ -39,10 +53,59 @@
 				rightData:[],
 				typeList:[],
 				userList:[],
-				serach:''
+				serach:'',
+				uid:'',
+				uname:'',
+				lFlag:true,
+				rFlag:true
 			}
 		},
 		methods:{
+			sdelete:function(id){
+				console.log(id)
+				uni.showModal({
+					title:'提醒',
+					content:"是否删除该问题",
+					success:(res)=>{
+						if(res.confirm)
+						{
+							uni.request({
+								header: {
+									'content-type': 'application/x-www-form-urlencoded', 
+								},
+								method:'POST',
+								url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/delete',
+								data:{
+									qid:id
+								},
+								success:(res)=>{
+									this.rightData = []
+									this.getRightList()
+									uni.showToast({
+										title:"删除成功",
+										icon:'success'
+									})
+								}
+							})
+						}
+					}
+				})
+			},
+			view:function(id,title,uid,ctime,content,type){
+				console.log(id)
+				let list = []
+				list.push({
+					id:id,
+					title:title,
+					uid:uid,
+					ctime:ctime,
+					content:content,
+					type:type
+				})
+				uni.navigateTo({
+					url:'./view?id='+id+'&title='+title+'&uid='+uid+'&ctime='+ctime+'&content='+content+'&type='+type
+				})
+			},
 			serachA:function(){
 				console.log(this.serach)
 				if(this.serach==''){
@@ -64,14 +127,23 @@
 						'content-type': 'application/x-www-form-urlencoded', 
 					},
 					method:'POST',
-					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/query',
+					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/uquery',
 					data:{
-						flag:2
+						flag:2,
+						uid:this.uid
 					},
 					success: (res) => {
 						console.log(res.data)
-						this.typeList = res.data.data
-						this.leftData = res.data.data
+						if(res.data.data.length==0)
+						{
+							this.lFlag = false
+						}
+						else{
+							this.lFlag=true
+							this.typeList = res.data.data
+							this.leftData = res.data.data
+						}
+						
 					}
 					
 				})
@@ -114,10 +186,11 @@
 						'content-type': 'application/x-www-form-urlencoded', 
 					},
 					method:'POST',
-					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/query',
+					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/uquery',
 					data:{
 						flag:4,
-						id:tid
+						id:tid,
+						uid:this.uid
 					},
 					success: (res) => {
 						console.log(res)
@@ -138,40 +211,60 @@
 			},
 			
 			getRightList:function(){
+				console.log(this.uid)
 				uni.request({
 					header: {
 						'content-type': 'application/x-www-form-urlencoded', 
 					},
 					method:'POST',
-					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/query',
+					url:'http://127.0.0.1/Question/Yii/backend/web/index.php/question/index/uquery',
 					data:{
-						flag:1
+						flag:1,
+						uid:this.uid
 					},
 					success: (res) => {
 						console.log(res)
-						let List = res.data.data
-						this.rightData = []
-						for(let i=0;i<List.length;i++){
-							this.rightData.push({
-								id:List[i].id,
-								title:List[i].title,
-								content:List[i].content,
-								type:this.getTypeName(List[i].type),
-								uid:this.getUserName(List[i].uid),
-								ctime:List[i].ctime
-							})
+						console.log(res.data.data.length)
+						if(res.data.data.length==0)
+						{
+							this.rFlag =false
 						}
+						else{
+							this.rFlag = true
+							let List = res.data.data
+							this.rightData = []
+							for(let i=0;i<List.length;i++){
+								this.rightData.push({
+									id:List[i].id,
+									title:List[i].title,
+									content:List[i].content,
+									type:this.getTypeName(List[i].type),
+									uid:this.getUserName(List[i].uid),
+									ctime:List[i].ctime
+								})
+							}
+						}
+						
 					}
 					
 				})
 			},
 		},
 		created() {
+			this.uid = this.$store.getters.getsId
+			this.uname= this.$store.getters.getsName
+			console.log(this.uid,this.uname)
+			this.getType()
+			this.getUser()
 			this.getRightList()
 		},
 		mounted() {
 			this.getType()
 			this.getUser()
+			this.uid = this.$store.getters.getsId
+			this.uname= this.$store.getters.getsName
+			console.log(this.uid,this.uname)
+			this.getRightList()
 		}
 	}
 </script>

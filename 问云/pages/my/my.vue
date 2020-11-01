@@ -116,7 +116,7 @@
 			if(this.$store.getters.getsId){
 				this.hasLogin =true,
 				this.username = this.$store.getters.getsName
-				this.role = this.$store.getters.getsId
+				this.role = this.$store.getters.getsRole
 			}
 		}
 	}
