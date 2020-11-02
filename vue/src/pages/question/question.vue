@@ -17,7 +17,7 @@
           </table>
         </div>
       </el-aside>
-      <el-main :span="20">
+      <el-main :span="16">
         <div>
           <div class="meeting" >
             <el-input v-model="inputname" placeholder="模糊查找" size="mini"></el-input>
@@ -29,11 +29,13 @@
         </div>
         <div >
           <div v-for="(x,i) in currentPageData" class="detail">
-            <span class="typename">{{x.typename}}</span>
-            <a @click="View(x.id,x.uid)" class="title">{{x.title}}</a>
-            <p class="content">
-              {{x.content}}
-            </p>
+            <div @click="View(x.id,x.uid)">
+              <span class="typename">{{x.typename}}</span>
+              <span  class="title">{{x.title}}</span>
+              <div v-html="x.content" class="content">
+                {{x.content}}
+              </div>
+            </div>
             <br>
             <div>
               <div class="Im">
@@ -58,8 +60,22 @@
         </div>
       </el-main>
       <el-aside :span="4">
-        <div class="aside">
-          <!--shisajsiajsang-->
+        <div>
+          <div class="personalData" @click="personal" >
+            <img src="../../assets/person.png" style="width: 50px;height: 50px;"/>
+            个人问题数据结果
+          </div>
+          <div class="personalData1" @click="personalData" >
+            <img src="../../assets/tongji.png" style="width: 50px;height: 50px;"/>
+            个人问题数据分析结果
+          </div>
+          <!--<div class="allData" @click="all">-->
+            <!--查看全站问题数据-->
+          <!--</div>-->
+          <div class="allData" @click="allData" >
+            <img src="../../assets/tongji2.png" style="width: 50px;height: 50px;"/>
+            全站问题数据分析结果
+          </div>
         </div>
       </el-aside>
     </el-container>
@@ -85,6 +101,27 @@
           }
       },
       methods:{
+        personal:function(){
+          this.$router.push({
+            path:'/question/personal',
+          })
+        },
+        personalData:function(){
+          this.$router.push({
+            path:'/question/personalAnalyse'
+          })
+        },
+        allData:function(){
+          this.$router.push({
+            path:'/question/analyse'
+          })
+        },
+        all:function()
+        {
+          this.$router.push({
+            path:'/question'
+          })
+        },
           Delete:function(id){
             this.$confirm("是否删除该题目",{
               confirmButtonText:"确定",
@@ -193,7 +230,7 @@
                   that.questionList.push({
                     id:List[i].id,
                     title:List[i].title,
-                    content:that.escapeHTML(List[i].content),
+                    content:List[i].content,
                     ctime:List[i].ctime,
                     uid:that.getUserName(List[i].uid),
                     typename: that.getTypeName(List[i].type)
@@ -266,6 +303,47 @@
 </script>
 
 <style scoped>
+  .personalData{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color: dodgerblue;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    vertical-align: middle;
+  }
+  .personalData1{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color: #FFCC66;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    vertical-align: middle;
+  }
+  .allData{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color:#6699CC;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+  }
   .aside{
     width: auto;
     margin-top: 50px;

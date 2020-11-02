@@ -34,7 +34,7 @@
             </el-form-item>
             <el-form-item>
               <div>
-                <button class="btn2 el-icon-circle-check" v-on:click="submit">完成</button>
+                <button class="btn2 el-icon-circle-check" @click.prevent ="submit">完成</button>
               </div>
             </el-form-item>
           </el-form>
@@ -89,13 +89,13 @@
         },
         back:function()
         {
+          this.$router.push({
+            path:'/u/question',
+          })
           this.addList.title=''
             this.addList.content=''
             this.addList.uid=''
             this.addList.type=''
-          this.$router.push({
-            path:'/u/question',
-          })
         },
         submit:function () {
           let that =this
@@ -104,13 +104,19 @@
           console.log(that.addList)
           if(that.addList.content.length==0)
           {
+            // that.$message({
+            //   type:'警告',
+            //   message:'内容为空'
+            // })
             this.$alert('内容为空', '警告', {
               confirmButtonText: '确定',})
+            return
           }
           else if(that.addList.title.length==0)
           {
-            this.$alert('题目为空', '警告', {
+            this.$message('题目为空', '警告', {
               confirmButtonText: '确定',})
+            return
           }
           else {
             if(that.addList.type.length==0)
@@ -127,14 +133,21 @@
                   type:that.addList.type,
                   uid:that.addList.uid
                 }).then(function (res) {
-                  alert(res.data.message)
-                  that.$router.push({
-                    path:'/u/question'
-                  })
-                  this.addList.title=''
-                  this.addList.content=''
-                  this.addList.uid=''
-                  this.addList.type=''
+                  console.log(res)
+                  if(res.data.message=="添加成功"){
+                    that.$router.push('/u/question')
+                    // that.$router.push({
+                    //   name:'Uquestion'
+                    // })
+                    alert(res.data.message)
+                    this.addList.title=''
+                    this.addList.content=''
+                    this.addList.uid=''
+                    this.addList.type=''
+                  }
+                  else{
+                    alert(res.data.message)
+                  }
                 }).catch(function (err) {
                   console.log(err)
                 })
@@ -149,14 +162,21 @@
                 type:that.addList.type,
                 uid:that.addList.uid
               }).then(function (res) {
-                alert(res.data.message)
-                that.$router.push({
-                  path:'/u/question'
-                })
-                this.addList.title=''
-                this.addList.content=''
-                this.addList.uid=''
-                this.addList.type=''
+                console.log(res)
+                if(res.data.message=="添加成功"){
+                  that.$router.push('/u/question')
+                  // that.$router.push({
+                  //   name:'Uquestion'
+                  // })
+                  alert(res.data.message)
+                  this.addList.title=''
+                  this.addList.content=''
+                  this.addList.uid=''
+                  this.addList.type=''
+                }
+                else{
+                  alert(res.data.message)
+                }
               }).catch(function (err) {
                 console.log(err)
               })

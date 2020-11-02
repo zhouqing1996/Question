@@ -176,6 +176,7 @@
                 that.$alert("添加成功，默认密码为：123456", '提示', {
                   confirmButtonText: '确定',})
                 that.getUserList()
+				that.dialogFormVisibleadd = false
                 that.Reset()
               }
               else{

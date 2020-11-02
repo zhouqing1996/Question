@@ -11,7 +11,7 @@
             </tr>
             <tr v-for="(x,i) in typeList" name="title">
               <td slot="title" @click="Click(x.id)">
-               <a><i class="el-icon-picture-outline-round">{{x.typename}}</i></a>
+                <a><i class="el-icon-picture-outline-round">{{x.typename}}</i></a>
               </td>
             </tr>
           </table>
@@ -91,12 +91,12 @@
     methods:{
       personalData:function(){
         this.$router.push({
-          path:'/u/panalyse'
+          path:'/question/personalAnalyse'
         })
       },
       allData:function(){
         this.$router.push({
-          path:'/u/viewall'
+          path:'/question'
         })
       },
       Delete:function(id){
@@ -145,7 +145,7 @@
       },
       View:function(id,uid) {
         this.$router.push({
-          path:'/u/viewquestion',
+          path:'/question/personalviewquestion',
           query:{
             qid:id,
             uid:uid
@@ -191,7 +191,7 @@
         }
         else{
           this.$router.push({
-            path:'/u/search',
+            path:'/question/personalsearch',
             query:{
               search:this.inputname
             }

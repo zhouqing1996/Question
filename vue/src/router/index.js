@@ -7,6 +7,10 @@ import Search from '../pages/question/Search'
 import Add from '../pages/question/Addquestion'
 import Viewquestion from '../pages/question/Viewquestion'
 import User from '../pages/question/User'
+import PersonQuestion from  '../pages/question/personQuestion'
+import PersonSearch from '../pages/question/personalSearch'
+import PersonalAnalyse from '../pages/question/personalAnalyse'
+import PersonalViewQuestion from '../pages/question/personalViewQuestion'
 
 import Register from '../pages/register'
 import Forget from '../pages/forget'
@@ -146,6 +150,38 @@ export default new Router({
             isLogin:true,
           },
           component: Question
+        },
+        {
+          path:'/question/personal',
+          name:'PersonQuestion',
+          meta:{
+            isLogin:true
+          },
+          component:PersonQuestion
+        },
+        {
+          path:'/question/personalsearch',
+          name:'PersonSearch',
+          meta:{
+            isLogin:true
+          },
+          component:PersonSearch
+        },
+        {
+          path:'/question/personalAnalyse',
+          name:'PersonalAnalyse',
+          meta:{
+            isLogin:true
+          },
+          component:PersonalAnalyse
+        },
+        {
+          path:'/question/personalviewquestion',
+          name:'PersonalViewQuestion',
+          meta:{
+            isLogin:true
+          },
+          component:PersonalViewQuestion
         },
         {
           path:'/question/search',

@@ -34,7 +34,7 @@
             </el-form-item>
             <el-form-item>
               <div>
-                <button class="btn2 el-icon-circle-check" v-on:click="submit">完成</button>
+                <button class="btn2 el-icon-circle-check" @@click.prevent ="submit">完成</button>
               </div>
             </el-form-item>
           </el-form>
@@ -46,45 +46,6 @@
       </div>
     </div>
   </div>
-  <!--<div >-->
-    <!--<div class="waimian">-->
-      <!--<el-form :model="addList">-->
-        <!--<el-form-item label="标题：" :label-width="labelWidth">-->
-          <!--<el-input v-model="addList.title" style="width: 200px"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<div class="rich-html">-->
-          <!--<vue-html5-editor :content="addList.content" :height="200" @change="updateData">-->
-          <!--</vue-html5-editor>-->
-        <!--</div>-->
-        <!--<el-form-item label="类型:" :label-width="labelWidth" >-->
-<!--&lt;!&ndash;          <el-input v-model="addList.type" style="width: 200px"></el-input>&ndash;&gt;-->
-          <!--<button type="button" class="btn2 el-icon-circle-plus-outline" @click.prevent="NewTVis=true">创建新分类</button>-->
-          <!--<br>-->
-          <!--<div style="float: left" v-if="NewTVis==true" v-cloak>-->
-            <!--<el-form :model="TYList">-->
-              <!--<el-form-item label="新建分类：">-->
-                <!--<el-input v-model="TYList.typename" style="width: 200px"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</el-form-item>-->
-        <!--<br>-->
-        <!--<div>-->
-          <!--<li v-for="(x,i) in typeList" class="li">-->
-            <!--<input type="radio" :name="1"-->
-                   <!--@change="Click(x.id,x.typename)" @click="NewTVis=false"/>{{x.typename}}-->
-          <!--</li>-->
-        <!--</div>-->
-      <!--</el-form>-->
-    <!--</div>-->
-    <!--<div>-->
-    <!--</div>-->
-    <!--<br>-->
-    <!--<div>-->
-      <!--<button class="btn2 el-icon-search" v-on:click="back">返回</button>-->
-      <!--<button class="btn2 el-icon-search" v-on:click="submit">完成</button>-->
-    <!--</div>-->
-  <!--</div>-->
 </template>
 
 <script>
@@ -158,7 +119,7 @@
                 type:"warning"
               }).then(()=>{
                 that.addList.type="未知"
-                that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/addquestion',{
+                that.$http.post('/yii/question/index/addquestion',{
                   title:that.addList.title,
                   content:that.addList.content,
                   type:that.addList.type,
@@ -181,7 +142,7 @@
             }
             else
             {
-              that.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/addquestion',{
+              that.$http.post('/yii/question/index/addquestion',{
                 title:that.addList.title,
                 content:that.addList.content,
                 type:that.addList.type,
@@ -203,7 +164,7 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/question/index/query',{
+          this.$http.post('/yii/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
