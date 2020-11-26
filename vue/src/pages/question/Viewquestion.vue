@@ -1,46 +1,26 @@
 <template>
   <div>
-
-    <div class="waimian">
-      <div class="back">
-        <el-page-header @back="back">
-        </el-page-header>
-      </div>
-      <br>
-      <div class="wenti">
-        <h3><span class="typename">{{qList.typename}}</span>      {{qList.title}}</h3>
-        <span><i class="el-icon-user"></i> {{qList.uid}}</span>
-        <span><i class="el-icon-date"></i> {{qList.ctime}}</span>
-        <hr>
-        <div v-html="qList.content">
-          {{qList.content}}
+    <el-aside :span="4"></el-aside>
+    <el-main :span="16">
+      <div class="waimian">
+        <div class="back">
+          <el-page-header @back="back">
+          </el-page-header>
+        </div>
+        <br>
+        <div class="wenti">
+          <h3><span class="typename">{{qList.typename}}</span>      {{qList.title}}</h3>
+          <span><i class="el-icon-user"></i> {{qList.username}}</span>
+          <span><i class="el-icon-date"></i> {{qList.ctime}}</span>
+          <hr>
+          <div v-html="qList.content">
+            {{qList.content}}
+          </div>
         </div>
       </div>
-    </div>
+    </el-main>
 
   </div>
-  <!--<div>-->
-
-    <!--<div style="float:left;text-align: left">-->
-      <!--<div style="float: right">-->
-        <!--<button class="btn2 el-icon-search" v-on:click="back">返回</button>-->
-      <!--</div>-->
-      <!--<br>-->
-      <!--<h3>{{qList.title}}</h3>-->
-      <!--<span><i class="el-icon-user"></i> 问题创建人：{{qList.uid}}-->
-        <!--<i class="el-icon-s-flag"></i> 问题类型：{{qList.typename}}-->
-        <!--<i class="el-icon-date"></i> 创建时间：{{qList.ctime}}</span>-->
-      <!--<hr>-->
-      <!--<div v-html="qList.content">-->
-        <!--{{qList.content}}-->
-      <!--</div>-->
-      <!--<div>-->
-        <!--<button class="btn2 el-icon-search" v-on:click="back">返回</button>-->
-      <!--</div>-->
-<!--&lt;!&ndash;      <span>{{qList[0].content}}</span>&ndash;&gt;-->
-    <!--</div>-->
-
-  <!--</div>-->
 </template>
 
 <script>
@@ -58,8 +38,8 @@
               uid:'',
               typename:''
             },
-            typeList:[],
-            userList:[]
+            // typeList:[],
+            // userList:[]
           }
       },
       methods:{
@@ -71,7 +51,7 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:5,
             qid:that.qid,
           }).then(function (res) {
@@ -81,8 +61,10 @@
             that.qList.title=List.title
             that.qList.content=List.content
             that.qList.ctime=List.ctime
-            that.qList.uid=that.getUserName(List.uid)
-            that.qList.typename= that.getTypeName(List.type)
+            that.qList.username =List.username
+            that.qList.uid=List.uid
+            that.qList.type = List.type
+            that.qList.typename= List.typename
             console.log(that.qList)
           }).catch(function (error) {
             console.log(error)
@@ -100,7 +82,7 @@
     },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -112,7 +94,7 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/query',{
+          this.$http.post('/home/user/query',{
             flag:2
           }).then(function (res) {
             that.userList = res.data.data
@@ -143,8 +125,8 @@
       created(){
           this.qid = this.$route.query.qid
         this.uid =this.$route.query.uid
-        this.getType()
-        this.getUser()
+        // this.getType()
+        // this.getUser()
         this.getList()
       }
 
@@ -161,7 +143,7 @@
     padding: 10px;
     background-color: aliceblue;
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 40px;
     border: white;
     width: auto;
   }

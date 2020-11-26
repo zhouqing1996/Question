@@ -16,7 +16,11 @@ import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
 Vue.prototype.$http = Axios
-
+Axios.interceptors.request.use(function (config) {
+  // config.headers="Access-Control-Allow-Origin: *";
+  config.url=process.env.API_HOST+config.url
+  return config
+})
 router.beforeEach((to,from,next)=> {
   let user = store.getters.getsName
   console.log(user)

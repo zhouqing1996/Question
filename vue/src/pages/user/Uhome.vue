@@ -53,7 +53,7 @@
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">注销</el-avatar>
               </template>
               <el-menu-item index="4-1"><router-link to="/my">我的资料</router-link></el-menu-item>
-              <el-menu-item index="4-2"><router-link to="/changepwd">修改密码</router-link></el-menu-item>
+              <!--<el-menu-item index="4-2"><router-link to="/changepwd">修改密码</router-link></el-menu-item>-->
               <el-menu-item index="4-3" v-on:click="logout" >注销
               </el-menu-item>
             </el-submenu>

@@ -53,8 +53,23 @@ class IndexController extends Controller
      */
     public function PasswordDecry($password,$encryptedData="zhouqing")
     {
-        $de = \Yii::$app->getSecurity()->decryptByPassword(base64_decode($password),$encryptedData);
-        return $de;
+        return \Yii::$app->getSecurity()->decryptByPassword(base64_decode($password),$encryptedData);
+    }
+    public function actionResetpass()
+    {
+        $request = \Yii::$app->request;
+        $id = $request->post('id');
+//        $query = (new Query())
+//            ->select('*')
+//            ->from('user')
+//            ->where(['id'=>$id])
+//            ->one();
+        $newpass = $this->PasswordEncry('zhou@123');
+        $updateU = \Yii::$app->db->createCommand()->update('user', ['password' => $newpass], ['id'=>$id])->execute();
+        if($updateU)
+        {
+            return array('data'=>$updateU,'msg'=>'重置密码成功！');
+        }
     }
 
     /*

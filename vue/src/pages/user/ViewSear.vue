@@ -76,7 +76,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/query',{
+        this.$http.post('/question/index/query',{
           flag:3,
           name:that.name
         }).then(function (res) {
@@ -102,7 +102,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/query',{
+        this.$http.post('/question/index/query',{
           flag:2,
           uid:this.uid
         }).then(function (res) {

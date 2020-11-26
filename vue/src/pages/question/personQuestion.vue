@@ -23,7 +23,7 @@
             <el-input v-model="inputname" placeholder="模糊查找" size="mini"></el-input>
           </div>
           <button class="btn2 el-icon-search" v-on:click="Search">搜索问题</button>
-          <router-link :to="{ name: 'Uadd' }">
+          <router-link :to="{ name: 'PersonalAdd' }">
             <button class="btn2 el-icon-circle-plus-outline">添加问题</button>
           </router-link>
         </div>
@@ -60,9 +60,11 @@
       <el-aside :span="4">
         <div>
           <div class="personalData" @click="personalData" >
+            <img src="../../assets/tongji.png" style="width: 50px;height: 50px;"/>
             个人问题数据分析结果
           </div>
           <div class="allData" @click="allData">
+            <img src="../../assets/web.png" style="width: 50px;height: 50px;"/>
             查看全站问题数据
           </div>
         </div>
@@ -106,7 +108,7 @@
           type:"warning"
         }).then(()=>{
           let that =this
-          that.$http.post('/yii/question/index/udelete',{
+          that.$http.post('/question/index/udelete',{
             qid:id,
             uid:that.uid
           }).then(function (res) {
@@ -155,7 +157,7 @@
       Click:function(id){
         let that = this
         that.questionList=[]
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:4,
           id:id,
           uid:that.uid
@@ -172,7 +174,9 @@
               content:List[i].content,
               ctime:List[i].ctime,
               uid:List[i].uid,
-              typename: that.getTypeName(List[i].type)
+              username:List[i].username,
+              type: List[i].type,
+              typename:List[i].typename
             })
           }
           console.log(that.questionList)
@@ -200,7 +204,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:1,
           uid:that.uid
         }).then(function (res) {
@@ -216,7 +220,9 @@
               content:List[i].content,
               ctime:List[i].ctime,
               uid:List[i].uid,
-              typename: that.getTypeName(List[i].type)
+              username:List[i].username,
+              type: List[i].type,
+              typename:List[i].typename
             })
           }
           that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
@@ -233,7 +239,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:2,
           uid:this.uid
         }).then(function (res) {
@@ -256,6 +262,16 @@
       },
     },
     created(){
+      this.questionList=[]
+      this.uid = this.$store.getters.getsId
+      console.log(this.uid)
+      this.getType()
+      this.getList()
+      console.log(this.questionList)
+      console.log(this.typeList)
+    },
+    mounted(){
+      this.questionList=[]
       this.uid = this.$store.getters.getsId
       console.log(this.uid)
       this.getType()
@@ -267,11 +283,20 @@
 </script>
 
 <style scoped>
+  .page{
+    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   .personalData{
     width: auto;
     height: 100px;
     color: #FFF;
-    background-color: dodgerblue;
+    background-color: #FFCC66;
     font-size: large;
     font-weight: bold;
     text-align: center;
@@ -368,6 +393,7 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    height: 80px;
     -webkit-box-orient: vertical;
   }
   .title {

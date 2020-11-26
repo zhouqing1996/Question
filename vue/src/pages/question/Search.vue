@@ -75,7 +75,7 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:3,
             name:that.name
           }).then(function (res) {
@@ -88,8 +88,10 @@
                 title: List[i].title,
                 content: List[i].content,
                 ctime: List[i].ctime,
-                uid: List[i].uid,
-                typename: that.getTypeName(List[i].type)
+                uid:List[i].uid,
+                username:List[i].username,
+                type: List[i].type,
+                typename:List[i].typename
               })
             }
             that.totalPage =Math.ceil(that.qList.length/that.pageSize)
@@ -101,7 +103,7 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:2,
             uid:this.uid
           }).then(function (res) {
@@ -125,13 +127,21 @@
       },
       created(){
           this.name = this.$route.query.search
-        this.getType()
+        // this.getType()
         this.getList()
       }
     }
 </script>
 
 <style scoped>
+  .page{
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   li{list-style-type:none;}
   .back{
     margin-top: 30px;

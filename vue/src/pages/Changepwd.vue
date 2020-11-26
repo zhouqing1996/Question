@@ -81,7 +81,7 @@
           //修改密码
           changePwd:function (newpwd,newpwds) {
             if(newpwd==newpwds) {
-              this.$http.post('http://120.78.150.89/Question/Yii/backend/web/index.php/home/user/changeuser', {
+              this.$http.post('/home/user/changeuser', {
                 flag: 3,
                 userid: this.$store.getters.getsId,
                 password: newpwd

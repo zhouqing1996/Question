@@ -49,7 +49,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/query',{
+        this.$http.post('/question/index/query',{
           flag:5,
           qid:that.qid,
         }).then(function (res) {
@@ -76,7 +76,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/query',{
+        this.$http.post('/question/index/query',{
           flag:2
         }).then(function (res) {
           console.log(res.data)
@@ -88,7 +88,7 @@
       },
       getUser:function(){
         let that =this
-        this.$http.post('/yii/home/user/query',{
+        this.$http.post('/home/user/query',{
           flag:2
         }).then(function (res) {
           that.userList = res.data.data

@@ -11,6 +11,7 @@ import PersonQuestion from  '../pages/question/personQuestion'
 import PersonSearch from '../pages/question/personalSearch'
 import PersonalAnalyse from '../pages/question/personalAnalyse'
 import PersonalViewQuestion from '../pages/question/personalViewQuestion'
+import PersonalAdd from '../pages/question/personalAdd'
 
 import Register from '../pages/register'
 import Forget from '../pages/forget'
@@ -41,8 +42,9 @@ import ChangePwd from '../pages/Changepwd'
 
 import Data from '../pages/home/Data'
 export default new Router({
-  // base:'/Question/vue',
-  mode:'history',
+  base:'/Question/',
+  mode:'hash',
+  hash:true,
   routes: [
     {
       path:'/slinechart',
@@ -182,6 +184,14 @@ export default new Router({
             isLogin:true
           },
           component:PersonalViewQuestion
+        },
+        {
+          path:'/question/personaladd',
+          name:'PersonalAdd',
+          meta:{
+            isLogin:true
+          },
+          component:PersonalAdd
         },
         {
           path:'/question/search',

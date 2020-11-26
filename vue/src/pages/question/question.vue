@@ -39,7 +39,7 @@
             <br>
             <div>
               <div class="Im">
-                <img src="../../assets/avter.png" class="avter"><span class="name">{{x.uid}}</span>
+                <img src="../../assets/avter.png" class="avter"><span class="name">{{x.username}}</span>
               </div>
               <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
             </div>
@@ -129,7 +129,7 @@
               type:"warning"
             }).then(()=>{
               let that =this
-              that.$http.post('/yii/question/index/delete',{
+              that.$http.post('/question/index/delete',{
                 qid:id
               }).then(function (res) {
                 console.log(res.data)
@@ -178,7 +178,7 @@
           let that = this
           that.typeVis = false
           that.questionList=[]
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:4,
             id:id
           }).then(function (res) {
@@ -191,8 +191,10 @@
                 title:List[i].title,
                 content:List[i].content,
                 ctime:List[i].ctime,
-                uid:that.getUserName(List[i].uid),
-                typename: that.getTypeName(List[i].type)
+                uid:List[i].uid,
+                username:List[i].username,
+                type: List[i].type,
+                typename:List[i].typename
               })
             }
             that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
@@ -219,22 +221,25 @@
           },
         getList:function () {
             let that =this
-          that.questionList=[]
-            this.$http.post('/yii/question/index/query',{
+
+            this.$http.post('/question/index/query',{
               flag:1
             }).then(function (res) {
               console.log(res.data)
               let List = res.data.data
+              that.questionList=[]
               for(let i=0;i<List.length;i++)
               {
-                  that.questionList.push({
-                    id:List[i].id,
-                    title:List[i].title,
-                    content:List[i].content,
-                    ctime:List[i].ctime,
-                    uid:that.getUserName(List[i].uid),
-                    typename: that.getTypeName(List[i].type)
-                  })
+                that.questionList.push({
+                  id:List[i].id,
+                  title:List[i].title,
+                  content:List[i].content,
+                  ctime:List[i].ctime,
+                  uid:List[i].uid,
+                  username:List[i].username,
+                  type: List[i].type,
+                  typename:List[i].typename
+                })
               }
               console.log(that.questionList)
               that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
@@ -251,7 +256,7 @@
     },
         getType:function () {
             let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -273,7 +278,7 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/query',{
+          this.$http.post('/home/user/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -292,17 +297,26 @@
         },
       },
       created(){
+        this.questionList=[]
         this.getType()
-        this.getUser()
+        // this.getUser()
         this.getList()
         console.log(this.typeList)
         console.log(this.questionList)
-
       }
     }
 </script>
 
 <style scoped>
+  .page{
+    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   .personalData{
     width: auto;
     height: 100px;
@@ -416,6 +430,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
+    height: 80px;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }

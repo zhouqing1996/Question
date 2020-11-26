@@ -10,24 +10,24 @@
             </el-page-header>
           </div>
           <div>
-
-            <!--<button class="btn2 el-icon-document" @click="AddB">批量添加</button>-->
-            <!--<input type="file" @change="importExcel(this)" id="inputExcel"-->
-                   <!--accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display: none"/>-->
           </div>
           <div>
             <table>
               <th>序号</th>
               <th>用户编号</th>
               <th>用户名</th>
+              <th>密码</th>
               <th>操作</th>
               <tr v-for="(x,i) in currentPageData">
                 <td>{{i+1}}</td>
                 <td>{{x.id}}</td>
                 <td v-if="x.role==1" style="color: red">{{x.username}}(管理员)</td>
                 <td v-if="x.role==3">{{x.username}}</td>
+                <td>{{x.password}}</td>
                 <td>
-                  <span class="span1" @click="DeleteUser(x.id)"><i class="el-icon-delete">删除</i></span>
+                  <span @click="PassReset(x.id)" class="span2"><i class="el-icon-key">重置密码</i> </span>
+                  <span v-if="x.role==1" class="span1">管理员</span>
+                  <span v-else class="span1"  @click="DeleteUser(x.id)"><i class="el-icon-delete">删除</i></span>
                 </td>
               </tr>
             </table>
@@ -89,11 +89,12 @@
           // 翻页相关
           currentPage: 1,
           totalPage: 1,
-          pageSize: 10,
+          pageSize: 8,
           currentPageData:[]
         }
       },
       methods:{
+
         back:function()
         {
           this.$router.push({
@@ -125,7 +126,7 @@
         },
         getUserList(){
           let that =this
-          that.$http.post('/yii/home/user/query',{
+          that.$http.post('/home/user/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -142,7 +143,7 @@
             cancelButtonText:'取消',
             type:"warning"
           }).then(()=>{
-            that.$http.post('/yii/home/user/deleteuser',{
+            that.$http.post('/home/user/deleteuser',{
               flag:2,
               userid:id
             }).then(function (res) {
@@ -166,14 +167,14 @@
           }
           else
           {
-            that.$http.post('/yii/home/user/adduser',{
+            that.$http.post('/home/user/adduser',{
               addname:that.addUser.username,
               addrole:that.addUser.role
             }).then(function (res) {
               console.log(res.data)
               if(res.data.message=="用户添加成功")
               {
-                that.$alert("添加成功，默认密码为：123456", '提示', {
+                that.$alert("添加成功，默认密码为：zhou@123", '提示', {
                   confirmButtonText: '确定',})
                 that.getUserList()
 				that.dialogFormVisibleadd = false
@@ -193,9 +194,9 @@
         },
         importExcel (obj) {
           let _this = this
-          let inputDOM = this.$refs.inputer   // 通过DOM取文件数据
+          let inputDOM = this.$refs.inputer   // 通过DOM取文件数据
           this.file = event.currentTarget.files[0]
-          var rABS = false // 是否将文件读取为二进制字符串
+          var rABS = false // 是否将文件读取为二进制字符串
           var f = this.file
           var reader = new FileReader()
           // if (!FileReader.prototype.readAsBinaryString) {
@@ -224,7 +225,7 @@
               }
               // outdata就是你想要的东西 excel导入的数据
               outdata = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]])
-              // excel 数据再处理
+              // excel 数据再处理
               let arr = []
               outdata.map(v => {
                 let obj ={}
@@ -239,7 +240,7 @@
                 data: JSON.stringify(_this.memberList)
               }
               console.log(data)
-              _this.$http.post('/yii/home/user/importexcel', data).then(body => {
+              _this.$http.post('/home/user/importexcel', data).then(body => {
                 alert(body.data.message)
                 _this.getUserList()
               })
@@ -252,19 +253,37 @@
             reader.readAsBinaryString(f)
           }
         },
+        PassReset:function(id)
+        {
+          let that =this
+          this.$http.post('/home/index/resetpass',{
+            id:id
+          }).then(function (res) {
+            console.log(res.data)
+            that.getUserList()
+            // that.totalPage =Math.ceil(that.userList.length/that.pageSize)
+            // that.totalPage=that.totalPage==0?1:that.totalPage
+            // that.setCurrentPageDate()
+          })
+        },
       },
       created(){
           this.getUserList()
       },
-      mounted(){
-
-      },
-
 
     }
 </script>
 
 <style scoped>
+  .page{
+    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   .back{
     margin-top: 30px;
     margin-bottom: 20px;

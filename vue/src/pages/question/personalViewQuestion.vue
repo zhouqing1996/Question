@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="waimian">
       <div class="back">
         <el-page-header @back="back">
@@ -17,7 +16,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -36,32 +34,34 @@
           uid:'',
           typename:''
         },
-        typeList:[],
-        userList:[]
+        // typeList:[],
+        // userList:[]
       }
     },
     methods:{
       back:function()
       {
         this.$router.push({
-          path:'/question',
+          path:'/question/personal',
         })
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:5,
           qid:that.qid,
           uid:that.uid
         }).then(function (res) {
           console.log(res.data)
-          let List = res.data.data[0]
+          let List = res.data.data
           that.qList.id=List.id
           that.qList.title=List.title
           that.qList.content=List.content
           that.qList.ctime=List.ctime
-          that.qList.uid=that.getUserName(List.uid)
-          that.qList.typename= that.getTypeName(List.type)
+          that.qList.uid=List.uid
+          that.qList.username=List.username
+          that.qList.type = List.type
+          that.qList.typename= List.typename
           console.log(that.qList)
         }).catch(function (error) {
           console.log(error)
@@ -77,52 +77,50 @@
           .replace(/"/g, '"')
           .replace(/'/g, '\'');
       },
-      getType:function () {
-        let that =this
-        this.$http.post('/yii/question/index/query',{
-          flag:2
-        }).then(function (res) {
-          console.log(res.data)
-          that.typeList = res.data.data
-          console.log(that.typeList)
-        }).catch(function (error) {
-          console.log(error)
-        })
-      },
-      getUser:function(){
-        let that =this
-        this.$http.post('/yii/home/user/query',{
-          flag:2
-        }).then(function (res) {
-          that.userList = res.data.data
-        })
-      },
-      getUserName:function(id){
-        let that =this
-        for(let k=0;k<that.userList.length;k++)
-        {
-          if(id==that.userList[k].id)
-          {
-            return that.userList[k].username
-          }
-        }
-      },
-      getTypeName:function (id) {
-        let that = this
-        for(let j=0;j<that.typeList.length;j++)
-        {
-          if(id == that.typeList[j].id)
-          {
-            return that.typeList[j].typename
-          }
-        }
-      },
+      // getType:function () {
+      //   let that =this
+      //   this.$http.post('/question/index/query',{
+      //     flag:2
+      //   }).then(function (res) {
+      //     console.log(res.data)
+      //     that.typeList = res.data.data
+      //     console.log(that.typeList)
+      //   }).catch(function (error) {
+      //     console.log(error)
+      //   })
+      // },
+      // getUser:function(){
+      //   let that =this
+      //   this.$http.post('/home/user/query',{
+      //     flag:2
+      //   }).then(function (res) {
+      //     that.userList = res.data.data
+      //   })
+      // },
+      // getUserName:function(id){
+      //   let that =this
+      //   for(let k=0;k<that.userList.length;k++)
+      //   {
+      //     if(id==that.userList[k].id)
+      //     {
+      //       return that.userList[k].username
+      //     }
+      //   }
+      // },
+      // getTypeName:function (id) {
+      //   let that = this
+      //   for(let j=0;j<that.typeList.length;j++)
+      //   {
+      //     if(id == that.typeList[j].id)
+      //     {
+      //       return that.typeList[j].typename
+      //     }
+      //   }
+      // },
     },
     created(){
       this.qid = this.$route.query.qid
       this.uid =this.$route.query.uid
-      this.getType()
-      this.getUser()
       this.getList()
     }
 
@@ -139,7 +137,7 @@
     padding: 10px;
     background-color: aliceblue;
     margin-left: 20px;
-    margin-right: 20px;
+    margin-right: 40px;
     border: white;
     width: auto;
   }

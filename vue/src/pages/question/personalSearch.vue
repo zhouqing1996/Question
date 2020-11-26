@@ -55,7 +55,7 @@
       back:function()
       {
         this.$router.push({
-          path:'/u/question',
+          path:'/question/personal',
         })
       },
       //分页
@@ -80,13 +80,14 @@
       },
       getList:function () {
         let that =this
-        that.$http.post('/yii/question/index/uquery',{
+        that.$http.post('/question/index/uquery',{
           flag:3,
           name:that.name,
           uid:that.uid
         }).then(function (res) {
           console.log(res.data)
           let List = res.data.data
+          that.qList = []
           for(let i=0;i<List.length;i++)
           {
             that.qList.push({
@@ -94,8 +95,10 @@
               title: List[i].title,
               content: List[i].content,
               ctime: List[i].ctime,
-              uid: List[i].uid,
-              typename: that.getTypeName(List[i].type)
+              uid:List[i].uid,
+              username:List[i].username,
+              type: List[i].type,
+              typename:List[i].typename
             })
           }
           that.totalPage =Math.ceil(that.qList.length/that.pageSize)
@@ -108,7 +111,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:2,
           uid:this.uid
         }).then(function (res) {
@@ -133,7 +136,14 @@
     created(){
       this.uid = this.$store.getters.getsId
       this.name = this.$route.query.search
-      this.getType()
+      // this.getType()
+      console.log(this.name)
+      this.getList()
+    },
+    mounted(){
+      this.uid = this.$store.getters.getsId
+      this.name = this.$route.query.search
+      // this.getType()
       console.log(this.name)
       this.getList()
     }

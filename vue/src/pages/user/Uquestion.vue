@@ -27,7 +27,7 @@
             <button class="btn2 el-icon-circle-plus-outline">添加问题</button>
           </router-link>
         </div>
-        <div >
+        <div v-if="currentPageData.length>0" >
           <div v-for="(x,i) in currentPageData" class="detail">
             <div @click="View(x.id,x.uid)" >
               <span class="typename">{{x.typename}}</span>
@@ -42,27 +42,34 @@
               <span class="time fr">{{x.ctime}}<span class="span1" @click="Delete(x.id)"><i class="el-icon-delete">删除</i></span></span>
             </div>
           </div>
+          <div class="page">
+            <ul class="pagination pagination-sm"><!--分页-->
+              <li class="page-item" v-if="currentPage!=1">
+                <span class="page-link" v-on:click="prePage">上一页</span>
+              </li>
+              <li class="page-item" >
+                <span class="page-link" >第{{ currentPage }}页/共{{totalPage}}页</span>
+              </li>
+              <li class="page-item" v-if="currentPage!=totalPage">
+                <span class="page-link" v-on:click="nextPage">下一页</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="page">
-          <ul class="pagination pagination-sm"><!--分页-->
-            <li class="page-item" v-if="currentPage!=1">
-              <span class="page-link" v-on:click="prePage">上一页</span>
-            </li>
-            <li class="page-item" >
-              <span class="page-link" >第{{ currentPage }}页/共{{totalPage}}页</span>
-            </li>
-            <li class="page-item" v-if="currentPage!=totalPage">
-              <span class="page-link" v-on:click="nextPage">下一页</span>
-            </li>
-          </ul>
+        <div v-else class="detail">
+          <br>
+          <span style="color: red;">暂无数据!</span>
         </div>
+
       </el-main>
       <el-aside :span="4">
         <div>
           <div class="personalData" @click="personalData" >
+            <img src="../../assets/tongji.png" style="width: 50px;height: 50px;"/>
             个人问题数据分析结果
           </div>
           <div class="allData" @click="allData">
+            <img src="../../assets/web.png" style="width: 50px;height: 50px;"/>
             查看全站问题数据
           </div>
         </div>
@@ -106,7 +113,7 @@
           type:"warning"
         }).then(()=>{
           let that =this
-          that.$http.post('/yii/question/index/udelete',{
+          that.$http.post('/question/index/udelete',{
             qid:id,
             uid:that.uid
           }).then(function (res) {
@@ -155,7 +162,7 @@
       Click:function(id){
         let that = this
         that.questionList=[]
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:4,
           id:id,
           uid:that.uid
@@ -172,7 +179,9 @@
               content:List[i].content,
               ctime:List[i].ctime,
               uid:List[i].uid,
-              typename: that.getTypeName(List[i].type)
+              username:List[i].username,
+              type: List[i].type,
+              typename:List[i].typename
             })
           }
           console.log(that.questionList)
@@ -200,7 +209,7 @@
       },
       getList:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:1,
           uid:that.uid
         }).then(function (res) {
@@ -216,7 +225,9 @@
               content:List[i].content,
               ctime:List[i].ctime,
               uid:List[i].uid,
-              typename: that.getTypeName(List[i].type)
+              username:List[i].username,
+              type: List[i].type,
+              typename:List[i].typename
             })
           }
           that.totalPage =Math.ceil(that.questionList.length/that.pageSize)
@@ -233,7 +244,7 @@
       },
       getType:function () {
         let that =this
-        this.$http.post('/yii/question/index/uquery',{
+        this.$http.post('/question/index/uquery',{
           flag:2,
           uid:this.uid
         }).then(function (res) {
@@ -256,6 +267,7 @@
       },
     },
     created(){
+      this.questionList=[]
       this.uid = this.$store.getters.getsId
       console.log(this.uid)
       this.getType()
@@ -267,11 +279,20 @@
 </script>
 
 <style scoped>
+  .page{
+    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   .personalData{
     width: auto;
     height: 100px;
     color: #FFF;
-    background-color: dodgerblue;
+    background-color: #FFCC66;
     font-size: large;
     font-weight: bold;
     text-align: center;
@@ -367,6 +388,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
+    height: 80px;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }

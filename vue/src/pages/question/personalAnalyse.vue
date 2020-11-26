@@ -34,12 +34,12 @@
       back:function()
       {
         this.$router.push({
-          path:'/question',
+          path:'/question/personal',
         })
       },
       getData:function () {
         let that = this
-        that.$http.post('/yii/question/analyse/personany',{
+        that.$http.post('/question/analyse/personany',{
           uid:that.$store.getters.getsId
         }).then(function (res) {
           console.log(res.data)
@@ -58,7 +58,7 @@
           console.log(err)
         });
 
-        that.$http.post('/yii/question/analyse/personheat',{
+        that.$http.post('/question/analyse/personheat',{
           uid:that.$store.getters.getsId
         }).then(function (res) {
           console.log(res.data)

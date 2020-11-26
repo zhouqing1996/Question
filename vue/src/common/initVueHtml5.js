@@ -113,7 +113,7 @@ export default function () {
       "align",
 //    "list",
    "link",
-//    "unlink",
+   "unlink",
 //    "tabulation",
       "image",
    "hr",

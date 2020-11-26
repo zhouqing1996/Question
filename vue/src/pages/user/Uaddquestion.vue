@@ -127,7 +127,7 @@
                 type:"warning"
               }).then(()=>{
                 that.addList.type="未知"
-                that.$http.post('/yii/question/index/uaddquestion',{
+                that.$http.post('/question/index/uaddquestion',{
                   title:that.addList.title,
                   content:that.addList.content,
                   type:that.addList.type,
@@ -156,7 +156,7 @@
               })
             }
             else {
-              that.$http.post('/yii/question/index/uaddquestion',{
+              that.$http.post('/question/index/uaddquestion',{
                 title:that.addList.title,
                 content:that.addList.content,
                 type:that.addList.type,
@@ -185,7 +185,7 @@
         },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/uquery',{
+          this.$http.post('/question/index/uquery',{
             flag:2,
             uid:that.$store.getters.getsId
           }).then(function (res) {

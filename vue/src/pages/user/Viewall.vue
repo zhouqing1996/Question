@@ -26,15 +26,17 @@
         </div>
         <div >
           <div v-for="(x,i) in currentPageData" class="detail">
-            <span class="typename">{{x.typename}}</span>
-            <a @click="View(x.id,x.uid)" class="title">{{x.title}}</a>
-            <p class="content">
-              {{x.content}}
-            </p>
-            <br>
+            <div @click="View(x.id,x.uid)">
+              <span class="typename">{{x.typename}}</span>
+              {{x.title}}
+              <p v-html="x.content" class="content">
+                {{x.content}}
+              </p>
+              <br>
+            </div>
             <div>
               <div class="Im">
-                <img src="../../assets/avter.png" class="avter"><span class="name">{{x.uid}}</span>
+                <img src="../../assets/avter.png" class="avter"><span class="name">{{x.username}}</span>
               </div>
               <span class="time fr">{{x.ctime}}</span>
             </div>
@@ -55,7 +57,23 @@
         </div>
       </el-main>
       <el-aside :span="4">
-        <!--shiajsia-->
+        <div>
+          <div class="personalData" @click="personal" >
+            <img src="../../assets/person.png" style="width: 50px;height: 50px;"/>
+            个人问题数据结果
+          </div>
+          <div class="personalData1" @click="personalData" >
+            <img src="../../assets/tongji.png" style="width: 50px;height: 50px;"/>
+            个人问题数据分析结果
+          </div>
+          <!--<div class="allData" @click="all">-->
+          <!--查看全站问题数据-->
+          <!--</div>-->
+          <!--<div class="allData" @click="allData" >-->
+            <!--<img src="../../assets/tongji2.png" style="width: 50px;height: 50px;"/>-->
+            <!--全站问题数据分析结果-->
+          <!--</div>-->
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -63,7 +81,7 @@
 
 <script>
     export default {
-      name: "View",
+      name: "Viewall",
       data() {
         return {
           //数据返回
@@ -79,6 +97,21 @@
         }
       },
       methods: {
+        personal:function(){
+          this.$router.push({
+            path:'/u/question',
+          })
+        },
+        personalData:function(){
+          this.$router.push({
+            path:'/u/panalyse'
+          })
+        },
+        // allData:function(){
+        //   this.$router.push({
+        //     path:'/question/analyse'
+        //   })
+        // },
         //分页
         setCurrentPageDate: function () {
           let begin = (this.currentPage - 1) * this.pageSize;
@@ -115,7 +148,7 @@
           let that = this
           that.typeVis = false
           that.questionList = []
-          this.$http.post('/yii/question/index/query', {
+          this.$http.post('/question/index/query', {
             flag: 4,
             id: id
           }).then(function (res) {
@@ -127,8 +160,10 @@
                 title: List[i].title,
                 content: List[i].content,
                 ctime: List[i].ctime,
-                uid: that.getUserName(List[i].uid),
-                typename: that.getTypeName(List[i].type)
+                uid:List[i].uid,
+                username:List[i].username,
+                type: List[i].type,
+                typename:List[i].typename
               })
             }
             that.totalPage = Math.ceil(that.questionList.length / that.pageSize)
@@ -155,20 +190,22 @@
         },
         getList: function () {
           let that = this
-          that.questionList = []
-          this.$http.post('/yii/question/index/query', {
+          this.$http.post('/question/index/query', {
             flag: 1
           }).then(function (res) {
             console.log(res.data)
+            that.questionList = []
             let List = res.data.data
             for (let i = 0; i < List.length; i++) {
               that.questionList.push({
                 id: List[i].id,
                 title: List[i].title,
-                content: that.escapeHTML(List[i].content),
+                content: List[i].content,
                 ctime: List[i].ctime,
-                uid: that.getUserName(List[i].uid),
-                typename: that.getTypeName(List[i].type)
+                uid:List[i].uid,
+                username:List[i].username,
+                type: List[i].type,
+                typename:List[i].typename
               })
             }
             console.log(that.questionList)
@@ -186,7 +223,7 @@
         },
         getType: function () {
           let that = this
-          this.$http.post('/yii/question/index/query', {
+          this.$http.post('/question/index/query', {
             flag: 2
           }).then(function (res) {
             console.log(res.data)
@@ -206,7 +243,7 @@
         },
         getUser: function () {
           let that = this
-          this.$http.post('/yii/home/user/query', {
+          this.$http.post('/home/user/query', {
             flag: 2
           }).then(function (res) {
             console.log(res.data)
@@ -224,8 +261,9 @@
       },
       created() {
         this.getType()
-        this.getUser()
+        // this.getUser()
         this.getList()
+        this.questionList = []
         console.log(this.typeList)
         console.log(this.questionList)
 
@@ -234,6 +272,43 @@
 </script>
 
 <style scoped>
+  .personalData{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color: dodgerblue;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    vertical-align: middle;
+  }
+  .personalData1{
+    width: auto;
+    height: 100px;
+    color: #FFF;
+    background-color: #FFCC66;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 50px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    vertical-align: middle;
+  }
+  .page{
+    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    height: 30px;/*脚部的高度*/
+    clear:both;
+  }
   .aside{
     width: auto;
     margin-top: 50px;
@@ -308,6 +383,7 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    height: 80px;
     -webkit-box-orient: vertical;
   }
   .title {

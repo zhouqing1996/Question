@@ -49,19 +49,21 @@
         },
         getList:function () {
           let that =this
-          this.$http.post('/yii/question/index/uquery',{
+          this.$http.post('/question/index/uquery',{
             flag:5,
             qid:that.qid,
             uid:that.uid
           }).then(function (res) {
             console.log(res.data)
-            let List = res.data.data[0]
+            let List = res.data.data
             that.qList.id=List.id
             that.qList.title=List.title
             that.qList.content=List.content
             that.qList.ctime=List.ctime
-            that.qList.uid=that.getUserName(List.uid)
-            that.qList.typename= that.getTypeName(List.type)
+            that.qList.uid=List.uid
+            that.qList.username= List.username
+            that.qList.type= List.type
+            that.qList.typename= List.typename
             console.log(that.qList)
           }).catch(function (error) {
             console.log(error)
@@ -79,7 +81,7 @@
     },
         getType:function () {
           let that =this
-          this.$http.post('/yii/question/index/query',{
+          this.$http.post('/question/index/query',{
             flag:2
           }).then(function (res) {
             console.log(res.data)
@@ -91,7 +93,7 @@
         },
         getUser:function(){
           let that =this
-          this.$http.post('/yii/home/user/query',{
+          this.$http.post('/home/user/query',{
             flag:2
           }).then(function (res) {
             that.userList = res.data.data
@@ -121,8 +123,8 @@
       created(){
           this.qid = this.$route.query.qid
         this.uid =this.$route.query.uid
-        this.getType()
-        this.getUser()
+        // this.getType()
+        // this.getUser()
         this.getList()
       }
 
