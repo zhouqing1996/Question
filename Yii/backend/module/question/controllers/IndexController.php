@@ -72,6 +72,7 @@ class IndexController extends Controller
                 ->select('*')
                 ->from('question')
                 ->all();
+<<<<<<< HEAD
             $type = array_merge(array_unique(array_column($query,'type')));
             $list = [];
             for($k=0;$k<count($type);$k++)
@@ -87,6 +88,29 @@ class IndexController extends Controller
 				$list[$k]['ctime']=$querys['ctime'];
             }
             return array("data"=>$list,"msg"=>"全部类型");
+=======
+            return array("data"=>$query,"msg"=>"全部类型");
+			// $query = (new Query())
+                // ->select('*')
+                // ->from('type')
+                // ->where(['uid'=>$uid])
+                // ->all();
+			// $querys = (new Query())
+				// ->select('*')
+				// ->from('question')
+				// ->where(['type'=>1)
+				// ->andwhere(['uid'=>$uid])
+				// ->one();
+			// if($querys)
+			// {
+				// $rt = array('id'=>1,'typename'=>'未知','uid'=>1);
+				// array_push($query,$rt);
+				// return array("data"=>$query,"msg"=>$uid."全部类型");
+			// }
+            // else{
+				// return array("data"=>$query,"msg"=>$uid."全部类型");
+			// }
+>>>>>>> 794a754f1c317958364117ec5efb78c9201d60bc
         }
         else if($flag==3)
         {
@@ -275,11 +299,21 @@ class IndexController extends Controller
         }
         else if($flag==2)
         {
+<<<<<<< HEAD
 			$query = (new Query())
+=======
+			// $query = (new Query())
+                // ->select('*')
+                // ->from('type')
+                // ->all();
+            // return array("data"=>$query,"msg"=>"全部类型");
+            $query = (new Query())
+>>>>>>> 794a754f1c317958364117ec5efb78c9201d60bc
                 ->select('*')
                 ->from('question')
                 ->where(['uid'=>$uid])
                 ->all();
+<<<<<<< HEAD
             $type = array_merge(array_unique(array_column($query,'type')));
 //            $l = [];
 //            for($i=0;$i<count($query);$i++)
@@ -303,6 +337,23 @@ class IndexController extends Controller
                 // array_push($querys,$list);
             }
             return array("data"=>$list,"msg"=>$uid."全部类型");
+=======
+			$querys = (new Query())
+				->select('*')
+				->from('question')
+				->where(['type'=>1])
+				->andwhere(['uid'=>$uid])
+				->one();
+			if($querys)
+			{
+				$rt = array('id'=>1,'typename'=>'未知','uid'=>1);
+				array_push($query,$rt);
+				return array("data"=>$query,"msg"=>$uid."全部类型");
+			}
+            else{
+				return array("data"=>$query,"msg"=>$uid."全部类型");
+			}
+>>>>>>> 794a754f1c317958364117ec5efb78c9201d60bc
         }
         else if($flag==3)
         {
